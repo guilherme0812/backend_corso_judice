@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node src/server.ts",
+    "studio": "npx prisma studio"
   },
   "author": "Guilherme Maffei",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@prisma/client": "^5.16.2",
     "express": "^4.19.2"
   }
 }
