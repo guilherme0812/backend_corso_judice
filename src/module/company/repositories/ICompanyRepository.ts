@@ -1,6 +1,6 @@
 export type CompanyCreate = {
   name: string;
-  ncpj: string;
+  cnpj: string;
   id?: string | undefined;
 };
 
