@@ -13,4 +13,8 @@ export class CompanyService {
   async create(body: CompanyCreate) {
     return await this.companyRepository.save(body);
   }
+
+  async findOne(id: string) {
+    return await this.companyRepository.findById(id);
+  }
 }

@@ -6,6 +6,10 @@ import {
 } from "./ICompanyRepository";
 
 export class CompanyPrismaRepository implements ICompanyRepository {
+  async findById(id: string): Promise<CompanySave | null> {
+    return await prismaClient.company.findUnique({ where: { id: id } });
+  }
+
   async findAll(): Promise<CompanySave[]> {
     return await prismaClient.company.findMany();
   }

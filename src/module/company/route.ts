@@ -5,7 +5,8 @@ const companyRouter = Router();
 
 const companyController = new CompanyController();
 
-companyRouter.get("/", companyController.findAll);
-companyRouter.post("/", companyController.create);
+companyRouter.get("/companies", companyController.findAll);
+companyRouter.get("/company", companyController.findOne);
+companyRouter.post("/companies", companyController.create);
 
 export { companyRouter };

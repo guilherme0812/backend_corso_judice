@@ -5,6 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/companies", companyRouter);
+app.use("/", companyRouter);
 
 app.listen(3000, () => console.log("Servidor está rodando"));

@@ -3,6 +3,19 @@ import { CompanyPrismaRepository } from "./repositories/CompanyPrismaRepository"
 import { CompanyService } from "./company.service";
 
 export class CompanyController {
+  async findOne(request: Request, response: Response) {
+    try {
+      const companyRepository = new CompanyPrismaRepository();
+      const companyService = new CompanyService(companyRepository);
+      const result = await companyService.findOne(request.query.id as string);
+      return response.status(200).json(result);
+    } catch (error: any) {
+      return response.status(400).json({
+        message: error.message,
+      });
+    }
+  }
+
   async findAll(request: Request, response: Response) {
     try {
       const companyRepository = new CompanyPrismaRepository();
