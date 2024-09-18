@@ -1,4 +1,4 @@
-GET http://localhost:3000/companies
+GET http://localhost:3000/api/companies
 ###
 
 GET http://localhost:3000/company?id=0407e2ee-87e7-4260-adb0-8993d7269301

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { CompanyPrismaRepository } from "./repositories/CompanyPrismaRepository";
-import { CompanyService } from "./company.service";
+import { CompanyService } from "./companies.service";
 
-export class CompanyController {
+export class CompaniesController {
   async findOne(request: Request, response: Response) {
     try {
       const companyRepository = new CompanyPrismaRepository();

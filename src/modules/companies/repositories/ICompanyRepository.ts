@@ -4,15 +4,15 @@ export type CompanyCreate = {
   id?: string | undefined;
 };
 
-export type CompanySave = {
+export type CompanyDataType = {
   id: string;
   name: string;
   cnpj: string;
 };
 
 export interface ICompanyRepository {
-  save(body: CompanyCreate): Promise<CompanySave>;
+  create(body: CompanyCreate): Promise<CompanyDataType>;
   // update(body: CompanySave): Promise<CompanySave>;
-  findById(id: string): Promise<CompanySave | null>;
-  findAll(): Promise<CompanySave[]>;
+  findById(id: string): Promise<CompanyDataType | null>;
+  findAll(): Promise<CompanyDataType[]>;
 }
