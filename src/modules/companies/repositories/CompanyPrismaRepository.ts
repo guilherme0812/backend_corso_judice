@@ -7,22 +7,25 @@ import {
 
 export class CompanyPrismaRepository implements ICompanyRepository {
   async findById(id: string): Promise<CompanyDataType | null> {
-    return await prismaClient.company.findUnique({ where: { id: id } });
+    return prismaClient.company.findUnique({ where: { id } });
   }
 
   async findAll(): Promise<CompanyDataType[]> {
-    return await prismaClient.company.findMany();
+    return prismaClient.company.findMany();
   }
 
   async create(body: CompanyCreate): Promise<CompanyDataType> {
-    const bodyData: CompanyCreate = {
-      cnpj: body.cnpj,
-      name: body.name,
-    };
-    const company = await prismaClient.company.create({
-      data: bodyData,
-    });
+    return prismaClient.company.create({ data: body });
+  }
 
-    return company;
+  async update(body: CompanyDataType): Promise<CompanyDataType> {
+    return prismaClient.company.update({
+      where: { id: body.id },
+      data: body,
+    });
+  }
+
+  async remove(id: string): Promise<CompanyDataType> {
+    return prismaClient.company.delete({ where: { id } });
   }
 }

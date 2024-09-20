@@ -1,13 +1,28 @@
 GET http://localhost:3000/api/companies
 ###
 
-GET http://localhost:3000/company?id=0407e2ee-87e7-4260-adb0-8993d7269301
+GET http://localhost:3000/api/company?id=2ac4ef6b-3ccd-4e1d-b321-58491e8aad
+
 
 ###
-POST http://localhost:3000/companies
+POST http://localhost:3000/api/company
 Content-Type: application/json
 
 {
  "name": "Empresa teste",
  "cnpj": "11111111111"
 }
+
+###
+PUT http://localhost:3000/api/company?id=abc
+Content-Type: application/json
+
+{
+ "id": "0407e2ee-87e7-4260-adb0-8993d7269300",
+ "name": "Escritório de Advocacia Justo",
+ "cnpj": "12345678000200"
+}
+
+###
+DELETE http://localhost:3000/api/company?id=68df5302-431c-4d80-a2ea-365e7cb29bfe
+Content-Type: application/json
