@@ -26,3 +26,36 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/api/company?id=68df5302-431c-4d80-a2ea-365e7cb29bfe
 Content-Type: application/json
+
+###
+GET http://localhost:3000/api/clients
+###
+
+GET http://localhost:3000/api/client?document=09500099988
+
+
+###
+POST http://localhost:3000/api/client
+Content-Type: application/json
+
+{
+ "document": "12312312312",
+ "fistName": "Lucas",
+ "lastName": "Mantes",
+ "companyId": "0407e2ee-87e7-4260-adb0-8993d7269301"
+}
+
+###
+PUT http://localhost:3000/api/client?document=09500099988
+Content-Type: application/json
+
+{
+ "document": "09500099988",
+ "fistName": "Fulano",
+ "lastName": "Da Silva",
+ "companyId": "0407e2ee-87e7-4260-adb0-8993d7269301"
+}
+
+###
+DELETE http://localhost:3000/api/client?document=12312312312
+Content-Type: application/json

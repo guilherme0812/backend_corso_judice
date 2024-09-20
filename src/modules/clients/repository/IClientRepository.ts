@@ -1,23 +1,23 @@
-export type ClientCreate = {
+export interface ClientCreate {
   document: string;
   fistName: string;
   lastName: string;
-  companyId: String;
-};
+  companyId: string;
+}
 
-export type ClientDataType = {
+export interface ClientDataType {
   document: string;
   fistName: string;
   lastName: string;
-  createdAt: string;
-  updatedAt: string;
-  companyId: String;
-};
+  createdAt: Date;
+  updatedAt: Date;
+  companyId: string;
+}
 
 export interface IClientRepository {
-  create(body: ClientCreate): Promise<ClientDataType>;
-  update(body: ClientCreate): Promise<ClientDataType>;
-  remove(id: string): Promise<ClientDataType>;
-  findById(id: string): Promise<ClientDataType | null>;
+  findUniqueOrThrow(document: string): Promise<ClientDataType | null>;
   findAll(): Promise<ClientDataType[]>;
+  create(data: ClientCreate): Promise<ClientDataType>;
+  update(data: ClientDataType): Promise<ClientDataType>;
+  remove(document: string): Promise<ClientDataType>;
 }
