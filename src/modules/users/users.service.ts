@@ -10,6 +10,12 @@ export class UserService {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async register({ password, ...body }: UserCreate) {
+    const existUser = await this.userRepository.findUserByEmail(body.email);
+
+    if (existUser) {
+      throw { status: 400, message: "Email já em uso" };
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.userRepository.create({
       ...body,
@@ -17,7 +23,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw { status: 404, message: "Company not found" };
+      throw { status: 404, message: "failed" };
     }
 
     return { message: "Cadastro de usuário realizado com sucesso!" };
@@ -42,5 +48,17 @@ export class UserService {
     });
 
     return { token, ...user };
+  }
+
+  async findAll() {
+    return this.userRepository.findAll();
+  }
+
+  async update(body: UserCreate) {
+    return this.userRepository.update(body);
+  }
+
+  async remove(id: string) {
+    return this.userRepository.remove(id);
   }
 }

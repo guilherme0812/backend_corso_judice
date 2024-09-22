@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CompaniesController } from "./companies.controller";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const companiesRouter = Router();
 

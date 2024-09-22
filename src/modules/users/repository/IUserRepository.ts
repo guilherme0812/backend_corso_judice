@@ -30,6 +30,7 @@ export type LoginBody = {
 };
 
 export interface IUserRepository {
+  findAll: () => Promise<UserDataType[]>;
   findUserByEmail: (email: string) => Promise<UserDataType | null>;
   create: (body: UserCreate) => Promise<any>;
   update(data: UserCreate): Promise<UserDataType>;
