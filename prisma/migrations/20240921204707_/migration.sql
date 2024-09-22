@@ -1,39 +1,14 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Client` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Contract` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Finance` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Client" DROP CONSTRAINT "Client_companyId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Contract" DROP CONSTRAINT "Contract_companyId_fkey";
-
--- DropForeignKey
-ALTER TABLE "User" DROP CONSTRAINT "User_companyId_fkey";
-
--- DropTable
-DROP TABLE "Client";
-
--- DropTable
-DROP TABLE "Contract";
-
--- DropTable
-DROP TABLE "Finance";
-
--- DropTable
-DROP TABLE "User";
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('admin', 'owner', 'employee');
 
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'USER',
+    "role" "Role" NOT NULL DEFAULT 'employee',
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "companyId" TEXT NOT NULL,
@@ -42,9 +17,20 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "companies" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "cnpj" TEXT NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "clients" (
     "document" TEXT NOT NULL,
-    "fistName" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

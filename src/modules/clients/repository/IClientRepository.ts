@@ -1,13 +1,14 @@
 export interface ClientCreate {
   document: string;
-  fistName: string;
+  firstName: string;
   lastName: string;
   companyId: string;
+  role?: any;
 }
 
 export interface ClientDataType {
   document: string;
-  fistName: string;
+  firstName: string;
   lastName: string;
   createdAt: Date;
   updatedAt: Date;

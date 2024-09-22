@@ -8,10 +8,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  password String
-  role     Role   @default(employee)
+  id        String @id @default(uuid())
+  email     String @unique
+  password  String
+  role      Role   @default(employee)
+  firstName String
+  lastName  String
 
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
@@ -43,9 +45,9 @@ model Company {
 }
 
 model Client {
-  document String @id @unique
-  fistName String
-  lastName String
+  document  String @id @unique
+  firstName String
+  lastName  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
