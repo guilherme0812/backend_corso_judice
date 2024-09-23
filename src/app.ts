@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import cors from "cors";
 import router from "./routes";
-import { authMiddleware } from "./modules/middleware/authMiddleware";
+import { authMiddleware } from "./middleware/authMiddleware";
 import { authRouter } from "./modules/users/users.routes";
 // import { authMiddleware } from './auth/auth.middleware';
 

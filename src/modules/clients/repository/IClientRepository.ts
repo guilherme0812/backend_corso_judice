@@ -2,17 +2,32 @@ export interface ClientCreate {
   document: string;
   firstName: string;
   lastName: string;
+  phone: string | null;
+  email: string | null;
+  hasWhatsapp: boolean;
+  address: string | null;
+  cityId: string | null;
+  stateId: string | null;
+  countryId: string | null;
+  birthDate: Date | null;
+  notes: string | null;
   companyId: string;
-  role?: any;
 }
 
 export interface ClientDataType {
   document: string;
   firstName: string;
   lastName: string;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
+  phone: string | null;
+  email: string | null;
+  hasWhatsapp: boolean;
+  address: string | null;
+  cityId: string | null;
+  stateId: string | null;
+  countryId: string | null;
+  birthDate: Date | null;
+  notes: string | null;
+  companyId: string | null;
 }
 
 export interface IClientRepository {

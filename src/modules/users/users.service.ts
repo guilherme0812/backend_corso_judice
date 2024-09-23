@@ -32,7 +32,6 @@ export class UserService {
   async login(body: LoginBody) {
     const user = await this.userRepository.findUserByEmail(body.email);
 
-    console.log("user", user);
     if (!user) {
       throw { status: 401, message: "Dados inválidos" };
     }
@@ -44,7 +43,7 @@ export class UserService {
     }
 
     const token = jwt.sign({ ...user }, process.env.JWT_SECRET!, {
-      expiresIn: "1h",
+      expiresIn: "1d",
     });
 
     return { token, ...user };

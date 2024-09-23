@@ -8,15 +8,20 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
-  email     String @unique
-  password  String
-  role      Role   @default(employee)
-  firstName String
-  lastName  String
+  id             String  @id @default(uuid())
+  email          String  @unique
+  password       String
+  role           Role    @default(employee)
+  firstName      String
+  lastName       String
+  phone          String?
+  hasWhatsapp    Boolean
+  profilePicture String?
+  isActive       Boolean @default(true)
 
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  lastLoginAt DateTime?
+  createAt    DateTime  @default(now())
+  updateAt    DateTime  @default(now())
 
   company   Company @relation(fields: [companyId], references: [id])
   companyId String
@@ -31,30 +36,83 @@ enum Role {
 }
 
 model Company {
-  id        String     @id @default(uuid())
-  name      String
-  cnpj      String
+  id                 String    @id @default(uuid())
+  name               String
+  cnpj               String
+  banner             String?
+  countryId          String?
+  stateId            String?
+  cityId             String?
+  address            String?
+  phone1             String?
+  phone2             String?
+  hasWhatsapp1       Boolean   @default(false)
+  hasWhatsapp2       Boolean   @default(false)
+  email              String?
+  website            String?
+  registrationNumber String?
+  taxRegime          String?
+  headquarters       Boolean   @default(false)
+  isActive           Boolean   @default(true)
+  createdBy          String?
+  updatedBy          String?
+  foundedAt          DateTime?
+  documentStorageUrl String?
+
   users     User[]
   clients   Client[]
   contracts Contract[]
+  Case      Case[]
 
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  lastLoginAt DateTime?
+  createAt    DateTime  @default(now())
+  updateAt    DateTime  @default(now())
 
   @@map("companies")
 }
 
 model Client {
-  document  String @id @unique
-  firstName String
-  lastName  String
+  document    String    @id @unique // Documento de identidade do cliente (CPF ou RG)
+  firstName   String
+  lastName    String
+  phone       String?
+  email       String?
+  hasWhatsapp Boolean   @default(false)
+  address     String?
+  cityId      String?
+  stateId     String?
+  countryId   String?
+  birthDate   DateTime?
+  notes       String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [id])
-  companyId String
+  Company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+  Case      Case[]
 
   @@map("clients")
+}
+
+model Case {
+  id          String     @id @default(uuid())
+  caseNumber  String     @unique
+  description String
+  status      CaseStatus @default(PENDING)
+  openedAt    DateTime   @default(now())
+  closedAt    DateTime?
+
+  client   Client @relation(fields: [clientId], references: [document])
+  clientId String
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String // Empresa responsável pelo processo
+
+  @@map("cases")
+}
+
+enum CaseStatus {
+  PENDING
+  OPEN
+  CLOSED
 }
 
 model Contract {

@@ -5,8 +5,8 @@ import { usersRouter } from "./modules/users/users.routes";
 
 const router = Router();
 
-router.use("/private", companiesRouter);
-router.use("/private", clientsRouter);
-router.use("/private", usersRouter);
+router.use("/", companiesRouter);
+router.use("/", clientsRouter);
+router.use("/", usersRouter);
 
 export default router;
