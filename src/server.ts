@@ -1,6 +1,8 @@
 import Fastify from "fastify";
-import cors from "@fastify/cors";
 import { companiesRoutes } from "./modules/companies/companies.routes";
+import { cors } from "./plugins/cors";
+import { prismaPlugin } from "./plugins/prisma";
+import { clientsRoutes } from "./modules/clients/clients.routes";
 // import { authMiddleware } from './plugins/auth';
 // import { prismaPlugin } from './plugins/prisma';
 // import userRoutes from './modules/user/user.routes';
@@ -10,27 +12,19 @@ import { companiesRoutes } from "./modules/companies/companies.routes";
 
 const app = Fastify();
 
-// Configurar CORS
-app.register(cors, {
-  origin: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-});
-
-// Plugins
-// app.register(prismaPlugin);
-// app.addHook('preHandler', authMiddleware);
-
-// Rotas
-// app.register(userRoutes, { prefix: '/users' });
-// app.register(companyRoutes, { prefix: '/companies' });
-// app.register(clientRoutes, { prefix: '/clients' });
-// app.register(caseRoutes, { prefix: '/cases' });
-app.register(companiesRoutes);
-
-app.get("/", async function handler(request, reply) {
-  return { hello: "world" };
-});
 const start = async () => {
+  // Plugins
+  await app.register(prismaPlugin);
+  console.log("Prisma plugin registered successfully");
+
+  await app.register(cors);
+  console.log("CORS plugin registered successfully");
+  // app.addHook('preHandler', authMiddleware);
+
+  // Rotas
+  app.register(companiesRoutes);
+  app.register(clientsRoutes);
+
   try {
     await app.listen({ port: 3001 });
     console.log("app running on http://localhost:3001");

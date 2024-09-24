@@ -4,14 +4,17 @@ export interface ClientCreate {
   lastName: string;
   phone: string | null;
   email: string | null;
-  hasWhatsapp: boolean;
   address: string | null;
   cityId: string | null;
   stateId: string | null;
   countryId: string | null;
   birthDate: Date | null;
   notes: string | null;
-  companyId: string;
+  companyId: string | null;
+  password: string;
+  hasWhatsapp: boolean;
+  profilePicture: string;
+  isActive: boolean;
 }
 
 export interface ClientDataType {

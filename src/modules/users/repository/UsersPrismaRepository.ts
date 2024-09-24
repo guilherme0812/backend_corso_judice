@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { prismaClient } from "../../prisma/prismaClient";
+import { prismaClient } from "../../../prisma/prismaClient";
 import { UserCreate, UserDataType, IUserRepository } from "./IUserRepository";
 
 export class UserPrismaRepository implements IUserRepository {

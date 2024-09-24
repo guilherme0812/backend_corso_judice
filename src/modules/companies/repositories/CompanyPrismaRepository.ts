@@ -1,4 +1,4 @@
-import { prismaClient } from "../../prisma/prismaClient";
+import { prismaClient } from "../../../prisma/prismaClient";
 import {
   CompanyCreate,
   CompanyDataType,
