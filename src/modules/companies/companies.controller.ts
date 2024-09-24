@@ -1,61 +1,72 @@
 import { Request, Response } from "express";
 import { CompanyPrismaRepository } from "./repositories/CompanyPrismaRepository";
 import { CompanyService } from "./companies.service";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 const companyRepository = new CompanyPrismaRepository();
 const companyService = new CompanyService(companyRepository);
 
+interface CompanyQuery {
+  id: string;
+}
+
 export class CompaniesController {
-  async findOne(request: Request, response: Response) {
+  async findOne(
+    request: FastifyRequest<{ Querystring: CompanyQuery }>,
+    reply: FastifyReply
+  ) {
     try {
       const result = await companyService.findOne(request.query.id as string);
-      return response.status(200).json(result);
+      return reply.status(200).send(result);
     } catch (error: any) {
-      return response.status(error.status || 500).json({
+      return reply.status(error.status || 500).send({
         message: error.message || "Internal server error",
       });
     }
   }
 
-  async findAll(request: Request, response: Response) {
+  async findAll(request: FastifyRequest, reply: FastifyReply) {
     try {
       const result = await companyService.findAll();
-      return response.status(200).json(result);
+      return reply.status(200).send(result);
     } catch (error: any) {
-      return response.status(error.status || 500).json({
+      return reply.status(error.status || 500).send({
         message: error.message || "Internal server error",
       });
     }
   }
 
-  async create(request: Request, response: Response) {
+  async create(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const result = await companyService.create(request.body);
-      return response.status(201).json(result);
+      const result = await companyService.create(request.body as any);
+      return reply.status(201).send(result);
     } catch (error: any) {
-      return response.status(error.status || 500).json({
+      return reply.status(error.status || 500).send({
         message: error.message || "Internal server error",
       });
     }
   }
 
-  async update(request: Request, response: Response) {
+  async update(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const result = await companyService.update(request.body);
-      return response.status(200).json(result);
+      const result = await companyService.update(request.body as any);
+      return reply.status(200).send(result);
     } catch (error: any) {
-      return response.status(error.status || 500).json({
+      return reply.status(error.status || 500).send({
         message: error.message || "Internal server error",
       });
     }
   }
 
-  async remove(request: Request, response: Response) {
+  async remove(
+    request: FastifyRequest<{ Querystring: CompanyQuery }>,
+    reply: FastifyReply
+  ) {
     try {
       const result = await companyService.remove(request.query.id as string);
-      return response.status(200).json(result);
+      return reply.status(200).send(result);
     } catch (error: any) {
-      return response.status(error.status || 500).json({
+      return reply.status(error.status || 500).send({
         message: error.message || "Internal server error",
       });
     }

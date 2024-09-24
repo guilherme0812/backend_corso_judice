@@ -1,14 +1,12 @@
-import { Router } from "express";
+import { FastifyInstance } from "fastify";
 import { CompaniesController } from "./companies.controller";
-
-const companiesRouter = Router();
 
 const companiesController = new CompaniesController();
 
-companiesRouter.get("/companies", companiesController.findAll);
-companiesRouter.get("/company", companiesController.findOne);
-companiesRouter.post("/company", companiesController.create);
-companiesRouter.put("/company", companiesController.update);
-companiesRouter.delete("/company", companiesController.remove);
-
-export { companiesRouter };
+export async function companiesRoutes(fastify: FastifyInstance) {
+  fastify.get("/companies", companiesController.findAll);
+  fastify.get("/company", companiesController.findOne);
+  fastify.post("/company", companiesController.create);
+  fastify.put("/company", companiesController.update);
+  fastify.delete("/company", companiesController.remove);
+}

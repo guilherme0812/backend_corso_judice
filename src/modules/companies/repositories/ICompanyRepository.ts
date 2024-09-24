@@ -1,7 +1,29 @@
 export type CompanyCreate = {
+  id?: string;
   name: string;
   cnpj: string;
-  id?: string | undefined;
+  banner?: string;
+  countryId?: string;
+  stateId?: string;
+  cityId?: string;
+  address?: string;
+  phone1?: string;
+  phone2?: string;
+  hasWhatsapp1: boolean;
+  hasWhatsapp2: boolean;
+  email?: string;
+  website?: string;
+  registrationNumber?: string;
+  taxRegime?: string;
+  headquarters: boolean;
+  isActive: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  foundedAt?: Date;
+  documentStorageUrl?: string;
+  lastLoginAt?: Date;
+  createAt?: Date;
+  updateAt?: Date;
 };
 
 export type CompanyDataType = {

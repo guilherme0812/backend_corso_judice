@@ -11,8 +11,28 @@ export class CompanyService {
     return this.companyRepository.findAll();
   }
 
-  async create(body: CompanyCreate) {
-    return this.companyRepository.create(body);
+  async create(data: CompanyCreate) {
+    return this.companyRepository.create({
+      name: data.name,
+      cnpj: data.cnpj,
+      banner: data.banner,
+      countryId: data.countryId,
+      stateId: data.stateId,
+      cityId: data.cityId,
+      address: data.address,
+      phone1: data.phone1,
+      phone2: data.phone2,
+      hasWhatsapp1: data.hasWhatsapp1 || false,
+      hasWhatsapp2: data.hasWhatsapp2 || false,
+      email: data.email,
+      website: data.website,
+      registrationNumber: data.registrationNumber,
+      taxRegime: data.taxRegime,
+      headquarters: data.headquarters || false,
+      foundedAt: data.foundedAt,
+      documentStorageUrl: data.documentStorageUrl,
+      isActive: data.isActive !== undefined ? data.isActive : true,
+    });
   }
 
   async update(body: CompanyDataType) {
