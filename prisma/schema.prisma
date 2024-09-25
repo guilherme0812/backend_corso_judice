@@ -15,7 +15,7 @@ model User {
   firstName      String
   lastName       String
   phone          String?
-  hasWhatsapp    Boolean
+  hasWhatsapp    Boolean @default(false)
   profilePicture String?
   isActive       Boolean @default(true)
 
@@ -23,8 +23,8 @@ model User {
   createAt    DateTime  @default(now())
   updateAt    DateTime  @default(now())
 
-  company   Company @relation(fields: [companyId], references: [id])
-  companyId String
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
 
   @@map("users")
 }

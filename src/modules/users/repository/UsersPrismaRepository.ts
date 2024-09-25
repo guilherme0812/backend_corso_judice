@@ -11,7 +11,10 @@ export class UserPrismaRepository implements IUserRepository {
         lastName: true,
         email: true,
         role: true,
+        phone: true,
         companyId: true,
+        profilePicture: true,
+        hasWhatsapp: true,
       },
     });
 
@@ -19,7 +22,7 @@ export class UserPrismaRepository implements IUserRepository {
   }
 
   async findUserByEmail(email: string): Promise<UserDataType | null> {
-    const user: any = prismaClient.user.findUniqueOrThrow({
+    const user: any = prismaClient.user.findUnique({
       where: { email },
       include: {
         company: true,
@@ -29,14 +32,26 @@ export class UserPrismaRepository implements IUserRepository {
     return user;
   }
 
+  async findOne(id: string): Promise<UserDataType | null> {
+    const user = prismaClient.user.findUnique({
+      where: { id },
+    });
+
+    return user;
+  }
+
   async create(body: UserCreate): Promise<UserDataType> {
     return prismaClient.user.create({
-      data: { ...body, role: body.role as unknown as Role },
+      data: {
+        ...body,
+        role: body.role as any,
+      },
     });
   }
 
   async update(body: UserCreate): Promise<UserDataType> {
-    return prismaClient.user.create({
+    return prismaClient.user.update({
+      where: { id: body.id },
       data: { ...body, role: body.role as unknown as Role },
     });
   }

@@ -1,62 +1,71 @@
-import { Request, Response } from "express";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { UserPrismaRepository } from "./repository/UsersPrismaRepository";
 import { UserService } from "./users.service";
+import { UserCreate } from "./repository/IUserRepository";
+
+interface LoginBody {
+  email: string;
+  password: string;
+}
+
+interface UserQuery {
+  id: string;
+}
 
 const userRepository = new UserPrismaRepository();
 const userService = new UserService(userRepository);
 
 export class UserController {
-  async login(req: Request, res: Response) {
-    const { email, password } = req.body;
+  async login(request: FastifyRequest, reply: FastifyReply) {
+    const { email, password } = request.body as LoginBody;
     try {
-      if (req.body.email && req.body.password) {
+      if (email && password) {
         const user = await userService.login({ email, password });
-        res.status(201).json(user);
+        reply.status(201).send(user);
       } else {
-        res.status(400).json({ message: "email or password" });
+        reply.status(400).send({ message: "email or password" });
       }
     } catch (error: any) {
-      res.status(error.status || 400).json({ message: error.message });
+      reply.status(error.status || 400).send({ message: error.message });
     }
   }
 
-  async findAll(req: Request, res: Response) {
+  async findAll(request: FastifyRequest, reply: FastifyReply) {
     try {
       const user = await userService.findAll();
-      res.status(201).json(user);
+      reply.status(201).send(user);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      reply.status(400).send({ message: error.message });
     }
   }
 
-  async register(req: Request, res: Response) {
+  async register(request: FastifyRequest, reply: FastifyReply) {
     try {
-      if (req.body.email && req.body.password) {
-        const user = await userService.register(req.body);
-        res.status(201).json(user);
-      } else {
-        res.status(400).json({ message: "email or password" });
-      }
+      const user = await userService.register(request.body as UserCreate);
+      reply.status(201).send(user);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      reply.status(400).send({ message: error.message });
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const user = await userService.update(req.body);
-      res.status(200).json(user);
+      const user = await userService.update(request.body as UserCreate);
+      reply.status(200).send(user);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      reply.status(400).send({ message: error.message });
     }
   }
 
-  async remove(req: Request, res: Response) {
+  async remove(
+    request: FastifyRequest<{ Querystring: UserQuery }>,
+    reply: FastifyReply
+  ) {
     try {
-      const user = await userService.remove(req.body.id);
-      res.status(200).json(user);
+      const user = await userService.remove(request.query.id);
+      reply.status(200).send(user);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      reply.status(error.status || 400).send({ message: error.message });
     }
   }
 }

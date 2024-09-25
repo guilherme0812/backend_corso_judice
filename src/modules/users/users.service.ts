@@ -17,6 +17,7 @@ export class UserService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = this.userRepository.create({
       ...body,
       password: hashedPassword,
@@ -58,6 +59,18 @@ export class UserService {
   }
 
   async remove(id: string) {
-    return this.userRepository.remove(id);
+    const existUser = await this.userRepository.findOne(id);
+
+    if (!existUser) {
+      throw { status: 404, message: "Usuário não encontrado" };
+    }
+
+    const exclude = await this.userRepository.remove(id);
+
+    if (!exclude) {
+      throw { status: 400, message: "Erro ao excluir usuário" };
+    }
+
+    return { message: "Exclusão de usuário realizado com sucesso!" };
   }
 }

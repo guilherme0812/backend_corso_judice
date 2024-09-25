@@ -3,6 +3,7 @@ import { companiesRoutes } from "./modules/companies/companies.routes";
 import { cors } from "./plugins/cors";
 import { prismaPlugin } from "./plugins/prisma";
 import { clientsRoutes } from "./modules/clients/clients.routes";
+import { usersRoutes } from "./modules/users/users.routes";
 // import { authMiddleware } from './plugins/auth';
 // import { prismaPlugin } from './plugins/prisma';
 // import userRoutes from './modules/user/user.routes';
@@ -24,6 +25,7 @@ const start = async () => {
   // Rotas
   app.register(companiesRoutes);
   app.register(clientsRoutes);
+  app.register(usersRoutes);
 
   try {
     await app.listen({ port: 3001 });
