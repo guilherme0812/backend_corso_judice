@@ -14,22 +14,26 @@ import { authMiddleware } from "./middleware/authMiddleware";
 
 const app = Fastify();
 
-const start = async () => {
-  // Plugins
-  await app.register(prismaPlugin);
-  console.log("Prisma plugin registered successfully");
+// Plugins
+app.register(prismaPlugin);
+console.log("Prisma plugin registered successfully");
 
-  await app.register(cors);
-  console.log("CORS plugin registered successfully");
-  // app.addHook('preHandler', authMiddleware);
+app.register(cors);
+console.log("CORS plugin registered successfully");
+// app.addHook('preHandler', authMiddleware);
 
-  // Rotas
-  app.register(companiesRoutes, {
-    prefix: "/api",
-  });
-  app.register(clientsRoutes, { prefix: "/api" });
-  app.register(usersRoutes, { prefix: "/api" });
+app.get("/", async (request, reply) => {
+  return { message: "Hello, Vercel!" };
+});
 
+// Rotas
+app.register(companiesRoutes, {
+  prefix: "/api",
+});
+app.register(clientsRoutes, { prefix: "/api" });
+app.register(usersRoutes, { prefix: "/api" });
+
+const startLocalServer = async () => {
   try {
     await app.listen({ port: 3000 });
     console.log("app running on http://localhost:3000");
@@ -39,6 +43,12 @@ const start = async () => {
   }
 };
 
-start();
+if (process.env.NODE_ENV != "production") {
+  startLocalServer();
+}
 
-export default start;
+// Exporta para produção
+export const serverHandler = async (req: any, res: any) => {
+  await app.ready();
+  app.server.emit("request", req, res);
+};
