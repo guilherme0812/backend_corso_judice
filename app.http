@@ -66,24 +66,27 @@ GET http://localhost:3000/api/users
 Content-Type: application/json
 
 ###
-POST  http://localhost:3000/api/user
+POST  http://localhost:3000/api/register
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "leggere@gmail.com",
   "password": "12345678",
   "firstName": "Fulano",
   "lastName": "da Silva",
-  "companyId": "f663b25d-0d86-439d-a395-8586561312a4", 
+  "companyId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8", 
   "role": "employee"  
 }
 
 ###
-POST  http://localhost:3000/login
+POST  http://localhost:3000/api/login
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "leggere@gmail.com",
   "password": "12345678"
  
 }
+
+###
+DELETE http://localhost:3000/api/user?id=39c746d0-8f88-4fd7-80b6-9915a6d32de6

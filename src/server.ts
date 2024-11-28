@@ -4,6 +4,7 @@ import { cors } from "./plugins/cors";
 import { prismaPlugin } from "./plugins/prisma";
 import { clientsRoutes } from "./modules/clients/clients.routes";
 import { usersRoutes } from "./modules/users/users.routes";
+import { authMiddleware } from "./middleware/authMiddleware";
 // import { authMiddleware } from './plugins/auth';
 // import { prismaPlugin } from './plugins/prisma';
 // import userRoutes from './modules/user/user.routes';
@@ -23,13 +24,15 @@ const start = async () => {
   // app.addHook('preHandler', authMiddleware);
 
   // Rotas
-  app.register(companiesRoutes);
-  app.register(clientsRoutes);
-  app.register(usersRoutes);
+  app.register(companiesRoutes, {
+    prefix: "/api",
+  });
+  app.register(clientsRoutes, { prefix: "/api" });
+  app.register(usersRoutes, { prefix: "/api" });
 
   try {
-    await app.listen({ port: 3001 });
-    console.log("app running on http://localhost:3001");
+    await app.listen({ port: 3000 });
+    console.log("app running on http://localhost:3000");
   } catch (err) {
     app.log.error(err);
     process.exit(1);

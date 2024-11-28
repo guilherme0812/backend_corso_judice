@@ -6,7 +6,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 const companyRepository = new CompanyPrismaRepository();
 const companyService = new CompanyService(companyRepository);
 
-interface CompanyQuery {
+export interface CompanyQuery {
   id: string;
 }
 
