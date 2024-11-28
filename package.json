@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "studio": "npx prisma studio",
-    "db:dev:migrate": "npx prisma migrate dev"
+    "db:dev:migrate": "npx prisma migrate dev",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "author": "Guilherme Maffei",
   "license": "ISC",
@@ -22,6 +24,7 @@
     "@prisma/client": "^5.19.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.7",
+    "@vercel/node": "^3.2.27",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
