@@ -48,7 +48,7 @@ if (process.env.NODE_ENV != "production") {
 }
 
 // Exporta para produção
-export const serverHandler = async (req: any, res: any) => {
+export default async function serverHandler(req: any, res: any) {
   await app.ready();
   app.server.emit("request", req, res);
-};
+}
