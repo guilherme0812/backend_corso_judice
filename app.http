@@ -1,3 +1,4 @@
+###
 GET http://localhost:3000/api/companies
 ###
 
@@ -39,10 +40,19 @@ POST http://localhost:3000/api/client
 Content-Type: application/json
 
 {
- "document": "12312312312",
- "fistName": "Lucas",
- "lastName": "Mantes",
- "companyId": "0407e2ee-87e7-4260-adb0-8993d7269301"
+ "document": "09500290598",
+  "firstName": "FUlano",
+  "lastName": "Da silva",
+  "phone": "47999999999",
+  "email": "fulano@hotmail.com",
+  "hasWhatsapp": true,
+  "address": "jsnxkjasxkjnaskjn",
+  "cityId": null,
+  "stateId": null,
+  "countryId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8",
+  "birthDate": null,
+  "notes": null,
+  "companyId": null
 }
 
 ###
@@ -90,3 +100,20 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/api/user?id=39c746d0-8f88-4fd7-80b6-9915a6d32de6
+
+###
+GET http://localhost:3000/api/cases
+Content-Type: application/json
+
+
+###
+POST  http://localhost:3000/api/cases
+Content-Type: application/json
+
+{
+  "companyId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8",
+  "clientId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8",
+   "caseNumber": "123456789";
+  "description": "Um novo caso";
+  "status": "OPEN";
+}

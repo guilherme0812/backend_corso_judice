@@ -21,10 +21,15 @@ export interface CreateCase {
   status: CaseStatus;
 }
 
+export interface FindAllParameters {
+  companyId?: string;
+  clientId?: string;
+}
+
 export interface ICaseRepository {
-  findAll: () => Promise<CaseDataType[]>;
+  findAll: (params?: FindAllParameters) => Promise<CaseDataType[]>;
   findOne: (id: string) => Promise<CaseDataType | null>;
-  create: (body: CreateCase) => Promise<any>;
-  update(data: CreateCase): Promise<CaseDataType>;
-  remove(id: string): Promise<any>;
+  create: (body: CreateCase) => Promise<CaseDataType>;
+  update(data: Partial<CaseDataType>): Promise<CaseDataType>;
+  remove(id: string): Promise<CaseDataType>;
 }

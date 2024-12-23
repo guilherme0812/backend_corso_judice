@@ -5,6 +5,7 @@ import { prismaPlugin } from "./plugins/prisma";
 import { clientsRoutes } from "./modules/clients/clients.routes";
 import { usersRoutes } from "./modules/users/users.routes";
 import { authMiddleware } from "./middleware/authMiddleware";
+import { casesRoutes } from "./modules/cases/cases.routes";
 // import { authMiddleware } from './plugins/auth';
 // import { prismaPlugin } from './plugins/prisma';
 // import userRoutes from './modules/user/user.routes';
@@ -29,6 +30,7 @@ const start = async () => {
   });
   app.register(clientsRoutes, { prefix: "/api" });
   app.register(usersRoutes, { prefix: "/api" });
+  app.register(casesRoutes, { prefix: "/api" });
 
   try {
     await app.listen({

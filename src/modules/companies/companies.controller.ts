@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { CompanyPrismaRepository } from "./repositories/CompanyPrismaRepository";
 import { CompanyService } from "./companies.service";
 import { FastifyReply, FastifyRequest } from "fastify";
