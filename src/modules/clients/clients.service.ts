@@ -1,3 +1,4 @@
+import { createResponse } from "../../utils/responseHelper";
 import {
   ClientCreate,
   ClientDataType,
@@ -12,7 +13,13 @@ export class ClientService {
   }
 
   async findOne(document: string) {
-    const client = await this.clientRepository.findUniqueOrThrow(document);
+    const client = await this.clientRepository.findOne(document);
+
+    return client;
+  }
+
+  async findUniqueOrThrow(document: string) {
+    const client = await this.findOne(document);
 
     if (!client) {
       throw { status: 404, message: "Client not found" };
@@ -22,6 +29,12 @@ export class ClientService {
   }
 
   async create(body: ClientCreate) {
+    const alreadyCreated = await this.findOne(body.document);
+
+    if (alreadyCreated) {
+      throw createResponse("Não foi possível registrar esse clinte", 400);
+    }
+
     return this.clientRepository.create(body);
   }
 

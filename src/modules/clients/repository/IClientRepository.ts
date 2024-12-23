@@ -34,7 +34,7 @@ export interface ClientDataType {
 }
 
 export interface IClientRepository {
-  findUniqueOrThrow(document: string): Promise<ClientDataType | null>;
+  findOne(document: string): Promise<ClientDataType | null>;
   findAll(): Promise<ClientDataType[]>;
   create(data: ClientCreate): Promise<ClientDataType>;
   update(data: ClientDataType): Promise<ClientDataType>;

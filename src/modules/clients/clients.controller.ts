@@ -15,7 +15,7 @@ export class ClientsController {
     reply: FastifyReply
   ) {
     try {
-      const result = await clientService.findOne(
+      const result = await clientService.findUniqueOrThrow(
         request.query.document as string
       );
       return reply.status(200).send(result);

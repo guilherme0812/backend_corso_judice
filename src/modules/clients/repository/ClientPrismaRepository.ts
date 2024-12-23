@@ -18,8 +18,8 @@ export class ClientPrismaRepository implements IClientRepository {
   remove(document: string): Promise<ClientDataType> {
     return prismaClient.client.delete({ where: { document } });
   }
-  findUniqueOrThrow(document: string): Promise<ClientDataType | null> {
-    return prismaClient.client.findUniqueOrThrow({ where: { document } });
+  findOne(document: string): Promise<ClientDataType | null> {
+    return prismaClient.client.findUnique({ where: { document } });
   }
   findAll(): Promise<ClientDataType[]> {
     return prismaClient.client.findMany();
