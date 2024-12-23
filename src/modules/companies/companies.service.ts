@@ -1,3 +1,4 @@
+import { createResponse } from "../../utils/responseHelper";
 import {
   CompanyCreate,
   CompanyDataType,
@@ -12,7 +13,7 @@ export class CompanyService {
   }
 
   async create(data: CompanyCreate) {
-    return this.companyRepository.create({
+    await this.companyRepository.create({
       name: data.name,
       cnpj: data.cnpj,
       banner: data.banner,
@@ -33,16 +34,20 @@ export class CompanyService {
       documentStorageUrl: data.documentStorageUrl,
       isActive: data.isActive !== undefined ? data.isActive : true,
     });
+
+    return createResponse("Empresa criada com sucesso");
   }
 
-  async update(body: CompanyDataType) {
-    const existingCompany = await this.companyRepository.findById(body.id);
+  async update(id: string, body: CompanyDataType) {
+    const existingCompany = await this.companyRepository.findById(id);
 
     if (!existingCompany) {
-      throw { status: 404, message: "Company not found" };
+      throw createResponse("Company not found", 404);
     }
 
-    return this.companyRepository.update(body);
+    await this.companyRepository.update(id, body);
+
+    return createResponse("Empresa alterada com sucesso");
   }
 
   async findOne(id: string) {
@@ -62,6 +67,8 @@ export class CompanyService {
       throw { status: 404, message: "Company not found" };
     }
 
-    return this.companyRepository.remove(id);
+    await this.companyRepository.remove(id);
+
+    return createResponse("Empresa removida com sucesso!", 200);
   }
 }

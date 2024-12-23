@@ -18,9 +18,9 @@ export class CompanyPrismaRepository implements ICompanyRepository {
     return prismaClient.company.create({ data: body });
   }
 
-  async update(body: CompanyDataType): Promise<CompanyDataType> {
+  async update(id: string, body: CompanyDataType): Promise<CompanyDataType> {
     return prismaClient.company.update({
-      where: { id: body.id },
+      where: { id },
       data: body,
     });
   }

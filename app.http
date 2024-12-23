@@ -10,7 +10,7 @@ POST http://localhost:3000/api/company
 Content-Type: application/json
 
 {
- "name": "Escritório Corso",
+ "name": "Escritório teste",
  "cnpj": "11111111111"
 }
 
@@ -113,7 +113,7 @@ Content-Type: application/json
 {
   "companyId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8",
   "clientId": "484392aa-8281-40d5-8cd7-ce82cd7ad5c8",
-   "caseNumber": "123456789";
+  "caseNumber": "123456789";
   "description": "Um novo caso";
   "status": "OPEN";
 }

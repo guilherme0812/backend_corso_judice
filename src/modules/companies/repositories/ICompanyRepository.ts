@@ -34,7 +34,7 @@ export type CompanyDataType = {
 
 export interface ICompanyRepository {
   create(body: CompanyCreate): Promise<CompanyDataType>;
-  update(body: CompanyDataType): Promise<CompanyDataType>;
+  update(id: string, body: CompanyDataType): Promise<CompanyDataType>;
   remove(id: string): Promise<CompanyDataType>;
   findById(id: string): Promise<CompanyDataType | null>;
   findAll(): Promise<CompanyDataType[]>;

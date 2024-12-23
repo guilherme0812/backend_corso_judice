@@ -1,6 +1,7 @@
 import { CompanyPrismaRepository } from "./repositories/CompanyPrismaRepository";
 import { CompanyService } from "./companies.service";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { createResponse } from "../../utils/responseHelper";
 
 const companyRepository = new CompanyPrismaRepository();
 const companyService = new CompanyService(companyRepository);
@@ -9,11 +10,10 @@ export interface CompanyQuery {
   id: string;
 }
 
+type CustomFastifyQueryParam = FastifyRequest<{ Querystring: CompanyQuery }>;
+
 export class CompaniesController {
-  async findOne(
-    request: FastifyRequest<{ Querystring: CompanyQuery }>,
-    reply: FastifyReply
-  ) {
+  async findOne(request: CustomFastifyQueryParam, reply: FastifyReply) {
     try {
       const result = await companyService.findOne(request.query.id as string);
       return reply.status(200).send(result);
@@ -46,9 +46,16 @@ export class CompaniesController {
     }
   }
 
-  async update(request: FastifyRequest, reply: FastifyReply) {
+  async update(request: CustomFastifyQueryParam, reply: FastifyReply) {
     try {
-      const result = await companyService.update(request.body as any);
+      if (!request.query.id) {
+        return createResponse("id is required");
+      }
+
+      const result = await companyService.update(
+        request.query.id,
+        request.body as any
+      );
       return reply.status(200).send(result);
     } catch (error: any) {
       return reply.status(error.status || 500).send({
@@ -57,10 +64,7 @@ export class CompaniesController {
     }
   }
 
-  async remove(
-    request: FastifyRequest<{ Querystring: CompanyQuery }>,
-    reply: FastifyReply
-  ) {
+  async remove(request: CustomFastifyQueryParam, reply: FastifyReply) {
     try {
       const result = await companyService.remove(request.query.id as string);
       return reply.status(200).send(result);
