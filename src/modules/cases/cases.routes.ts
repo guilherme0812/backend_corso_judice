@@ -1,20 +1,37 @@
 import { FastifyInstance } from "fastify";
-import { CasesController } from "./cases.controller";
+import { CasesController, CustomFastifyQueryParam } from "./cases.controller";
+import { authMiddleware } from "../../middleware/authMiddleware";
 
 const casesController = new CasesController();
 
 export async function casesRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/cases",
-    // { preHandler: [authMiddleware] },
+    { preHandler: [authMiddleware] },
     casesController.findAll
   );
 
-  fastify.get("/case", casesController.findOne);
+  fastify.get(
+    "/case",
+    { preHandler: [authMiddleware] },
+    casesController.findOne as any
+  );
 
-  fastify.post("/case", casesController.create);
+  fastify.post(
+    "/case",
+    { preHandler: [authMiddleware] },
+    casesController.create
+  );
 
-  fastify.put("/case", casesController.update);
+  fastify.put(
+    "/case",
+    { preHandler: [authMiddleware] },
+    casesController.update as any
+  );
 
-  fastify.delete("/case", casesController.delete);
+  fastify.delete(
+    "/case",
+    { preHandler: [authMiddleware] },
+    casesController.delete as any
+  );
 }

@@ -11,7 +11,9 @@ export interface CaseQuery {
   id: string;
 }
 
-type CustomFastifyQueryParam = FastifyRequest<{ Querystring: CaseQuery }>;
+export type CustomFastifyQueryParam = FastifyRequest<{
+  Querystring: CaseQuery;
+}>;
 
 export class CasesController {
   async findAll(request: FastifyRequest, reply: FastifyReply) {
