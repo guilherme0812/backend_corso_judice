@@ -30,6 +30,6 @@ export interface ICaseRepository {
   findAll: (params?: FindAllParameters) => Promise<CaseDataType[]>;
   findOne: (id: string) => Promise<CaseDataType | null>;
   create: (body: CreateCase) => Promise<CaseDataType>;
-  update(data: Partial<CaseDataType>): Promise<CaseDataType>;
+  update(id: string, data: Partial<CaseDataType>): Promise<CaseDataType>;
   remove(id: string): Promise<CaseDataType>;
 }

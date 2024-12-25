@@ -13,4 +13,8 @@ export async function casesRoutes(fastify: FastifyInstance) {
   fastify.get("/case", casesController.findOne);
 
   fastify.post("/case", casesController.create);
+
+  fastify.put("/case", casesController.update);
+
+  fastify.delete("/case", casesController.delete);
 }

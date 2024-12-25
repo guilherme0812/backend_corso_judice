@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { CaseService } from "./cases.service";
 import { CasePrismaRepository } from "./repository/CasePrismaRepository";
 import { createResponse } from "../../utils/responseHelper";
-import { CreateCase } from "./repository/ICaseRepository";
+import { CaseDataType, CreateCase } from "./repository/ICaseRepository";
 
 const caseRepository = new CasePrismaRepository();
 const caseService = new CaseService(caseRepository);
@@ -42,6 +42,36 @@ export class CasesController {
     try {
       await caseService.create(request.body as CreateCase);
       reply.status(200).send(createResponse("User created"));
+    } catch (error: any) {
+      reply.status(error.status || 400).send({ message: error.message });
+    }
+  }
+
+  async update(request: CustomFastifyQueryParam, reply: FastifyReply) {
+    try {
+      const id = request.query.id;
+
+      if (!id) {
+        throw createResponse("Id is required");
+      }
+
+      await caseService.update(id, request.body as CaseDataType);
+      reply.status(200).send(createResponse("User updated"));
+    } catch (error: any) {
+      reply.status(error.status || 400).send({ message: error.message });
+    }
+  }
+
+  async delete(request: CustomFastifyQueryParam, reply: FastifyReply) {
+    try {
+      const id = request.query.id;
+
+      if (!id) {
+        throw createResponse("Id is required");
+      }
+
+      await caseService.remove(id);
+      reply.status(201).send(createResponse("User deleted"));
     } catch (error: any) {
       reply.status(error.status || 400).send({ message: error.message });
     }

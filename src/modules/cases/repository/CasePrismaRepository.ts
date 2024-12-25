@@ -29,10 +29,10 @@ export class CasePrismaRepository implements ICaseRepository {
     return caseData as unknown as CaseDataType;
   }
 
-  async update(data: Partial<CaseDataType>): Promise<CaseDataType> {
+  async update(id: string, data: Partial<CaseDataType>): Promise<CaseDataType> {
     const caseData = await prismaClient.case.update({
       data: { ...data, status: data.status as unknown as CaseStatus },
-      where: { id: data.id },
+      where: { id },
     });
 
     return caseData as unknown as CaseDataType;

@@ -25,9 +25,9 @@ export class CaseService {
     return this.caseRepository.create(body);
   }
 
-  async update(body: CaseDataType) {
-    const caseData = await this.findOne(body.id);
-    return this.caseRepository.update(caseData);
+  async update(id: string, body: CaseDataType) {
+    await this.findOne(id);
+    return this.caseRepository.update(id, body);
   }
 
   async remove(id: string) {
