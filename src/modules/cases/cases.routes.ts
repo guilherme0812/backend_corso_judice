@@ -9,4 +9,8 @@ export async function casesRoutes(fastify: FastifyInstance) {
     // { preHandler: [authMiddleware] },
     casesController.findAll
   );
+
+  fastify.get("/case", casesController.findOne);
+
+  fastify.post("/case", casesController.create);
 }
