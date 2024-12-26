@@ -1,6 +1,8 @@
 import { ClientPrismaRepository } from "./repository/ClientPrismaRepository";
 import { ClientService } from "./clients.service";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { GenericParams } from "./repository/IClientRepository";
+import { UserDataType } from "../users/repository/IUserRepository";
 
 interface ClientQuery {
   document: string;
@@ -26,9 +28,19 @@ export class ClientsController {
     }
   }
 
-  async findAll(request: FastifyRequest, reply: FastifyReply) {
+  async findAll(
+    request: FastifyRequest<{ Querystring: GenericParams }> & {
+      user: UserDataType;
+    },
+    reply: FastifyReply
+  ) {
     try {
-      const result = await clientService.findAll();
+      const params: GenericParams = {
+        companyId: request.user?.companyId,
+        name: request.query.name,
+      };
+
+      const result = await clientService.findAll(params);
       return reply.status(200).send(result);
     } catch (error: any) {
       return reply.status(error.status || 500).send({

@@ -2,14 +2,15 @@ import { createResponse } from "../../utils/responseHelper";
 import {
   ClientCreate,
   ClientDataType,
+  GenericParams,
   IClientRepository,
 } from "./repository/IClientRepository";
 
 export class ClientService {
   constructor(private readonly clientRepository: IClientRepository) {}
 
-  async findAll() {
-    return this.clientRepository.findAll();
+  async findAll(params: GenericParams) {
+    return this.clientRepository.findAll(params);
   }
 
   async findOne(document: string) {

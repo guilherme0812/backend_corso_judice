@@ -1,3 +1,7 @@
+export type GenericParams = {
+  companyId?: string | null;
+  name?: string;
+};
 export interface ClientCreate {
   document: string;
   firstName: string;
@@ -35,7 +39,7 @@ export interface ClientDataType {
 
 export interface IClientRepository {
   findOne(document: string): Promise<ClientDataType | null>;
-  findAll(): Promise<ClientDataType[]>;
+  findAll(params: GenericParams): Promise<ClientDataType[]>;
   create(data: ClientCreate): Promise<ClientDataType>;
   update(data: ClientDataType): Promise<ClientDataType>;
   remove(document: string): Promise<ClientDataType>;

@@ -2,6 +2,7 @@ import { prismaClient } from "../../../prisma/prismaClient";
 import {
   ClientCreate,
   ClientDataType,
+  GenericParams,
   IClientRepository,
 } from "./IClientRepository";
 
@@ -21,7 +22,22 @@ export class ClientPrismaRepository implements IClientRepository {
   findOne(document: string): Promise<ClientDataType | null> {
     return prismaClient.client.findUnique({ where: { document } });
   }
-  findAll(): Promise<ClientDataType[]> {
-    return prismaClient.client.findMany();
+  findAll({ companyId, name }: GenericParams): Promise<ClientDataType[]> {
+    const whereClause: any = {};
+
+    if (companyId) {
+      whereClause.companyId = companyId;
+    }
+
+    if (name) {
+      whereClause.OR = [
+        { firstName: { contains: name, mode: "insensitive" } },
+        { lastName: { contains: name, mode: "insensitive" } },
+      ];
+    }
+
+    return prismaClient.client.findMany({
+      where: whereClause,
+    });
   }
 }

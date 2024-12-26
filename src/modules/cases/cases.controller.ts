@@ -3,6 +3,8 @@ import { CaseService } from "./cases.service";
 import { CasePrismaRepository } from "./repository/CasePrismaRepository";
 import { createResponse } from "../../utils/responseHelper";
 import { CaseDataType, CreateCase } from "./repository/ICaseRepository";
+import { UserDataType } from "../users/repository/IUserRepository";
+import { CustomFastifyRequest } from "../../types";
 
 const caseRepository = new CasePrismaRepository();
 const caseService = new CaseService(caseRepository);
@@ -16,7 +18,7 @@ export type CustomFastifyQueryParam = FastifyRequest<{
 }>;
 
 export class CasesController {
-  async findAll(request: FastifyRequest, reply: FastifyReply) {
+  async findAll(request: CustomFastifyRequest, reply: FastifyReply) {
     try {
       const cases = await caseService.findAll();
       reply.status(200).send(cases);

@@ -8,7 +8,7 @@ export async function casesRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/cases",
     { preHandler: [authMiddleware] },
-    casesController.findAll
+    casesController.findAll as any
   );
 
   fastify.get(
