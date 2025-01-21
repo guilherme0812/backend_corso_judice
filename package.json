@@ -8,7 +8,12 @@
     "studio": "npx prisma studio",
     "db:dev:migrate": "npx prisma migrate dev",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:restart": "npm run docker:down && npm run docker:up",
+    "docker:logs": "docker-compose logs -f",
+    "docker:prune": "docker system prune -f --volumes"
   },
   "author": "Guilherme Maffei",
   "license": "ISC",
