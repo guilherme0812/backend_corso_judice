@@ -37,7 +37,7 @@ const start = async () => {
       port: Number(process.env.PORT) || 3000,
       host: "0.0.0.0",
     });
-    console.log("app running on http://localhost:3000");
+    console.log(`app running on http://localhost:${process.env.PORT}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);

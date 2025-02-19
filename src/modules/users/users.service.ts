@@ -4,6 +4,7 @@ import {
   IUserRepository,
   LoginBody,
   UserCreate,
+  UserDataType,
 } from "./repository/IUserRepository";
 
 export class UserService {
@@ -37,7 +38,10 @@ export class UserService {
       throw { status: 401, message: "Dados inválidos" };
     }
 
-    const isPasswordValid = await bcrypt.compare(body.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      body.password,
+      user.password as any
+    );
 
     if (!isPasswordValid) {
       throw { status: 401, message: "Dados inválidos" };
@@ -47,7 +51,30 @@ export class UserService {
       expiresIn: "1d",
     });
 
-    return { token, ...user };
+    const { password, ...userData } = user;
+
+    return { token, ...userData };
+  }
+
+  async loginSocial({ ...body }: UserCreate) {
+    let user = await this.userRepository.findUserByEmail(body.email);
+
+    if (!user) {
+      // const hashedPassword = await bcrypt.hash(password, 10);
+
+      user = await this.userRepository.create({
+        ...body,
+        password: null as unknown as string,
+        // password: hashedPassword,
+      });
+    }
+
+    const token = jwt.sign({ ...user }, process.env.JWT_SECRET!, {
+      expiresIn: "1d",
+    });
+    const { password, ...userData } = user as UserDataType;
+
+    return { token, ...userData };
   }
 
   async findAll() {

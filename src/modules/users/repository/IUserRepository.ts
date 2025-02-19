@@ -21,7 +21,7 @@ export interface UserCreate {
 export interface UserDataType {
   id: string;
   email: string;
-  password: string;
+  password: string | null;
   role: any;
   firstName: string;
   lastName: string;

@@ -48,6 +48,15 @@ export class UserController {
     }
   }
 
+  async loginSocial(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const user = await userService.loginSocial(request.body as UserCreate);
+      reply.status(200).send(user);
+    } catch (error: any) {
+      reply.status(400).send({ message: error.message });
+    }
+  }
+
   async update(request: FastifyRequest, reply: FastifyReply) {
     try {
       const user = await userService.update(request.body as UserCreate);
