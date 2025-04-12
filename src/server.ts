@@ -4,14 +4,8 @@ import { cors } from "./plugins/cors";
 import { prismaPlugin } from "./plugins/prisma";
 import { clientsRoutes } from "./modules/clients/clients.routes";
 import { usersRoutes } from "./modules/users/users.routes";
-import { authMiddleware } from "./middleware/authMiddleware";
 import { casesRoutes } from "./modules/cases/cases.routes";
-// import { authMiddleware } from './plugins/auth';
-// import { prismaPlugin } from './plugins/prisma';
-// import userRoutes from './modules/user/user.routes';
-// import companyRoutes from './modules/company/company.routes';
-// import clientRoutes from './modules/client/client.routes';
-// import caseRoutes from './modules/case/case.routes';
+import { tasksRoutes } from "./modules/tasks/tasks.routes";
 
 const app = Fastify();
 
@@ -31,6 +25,7 @@ const start = async () => {
   app.register(clientsRoutes, { prefix: "/api" });
   app.register(usersRoutes, { prefix: "/api" });
   app.register(casesRoutes, { prefix: "/api" });
+  app.register(tasksRoutes, { prefix: "/api" });
 
   try {
     await app.listen({
