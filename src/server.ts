@@ -6,12 +6,16 @@ import { clientsRoutes } from "./modules/clients/clients.routes";
 import { usersRoutes } from "./modules/users/users.routes";
 import { casesRoutes } from "./modules/cases/cases.routes";
 import { tasksRoutes } from "./modules/tasks/tasks.routes";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = Fastify();
 
 const start = async () => {
   // Plugins
   await app.register(prismaPlugin);
+
   console.log("Prisma plugin registered successfully");
 
   await app.register(cors);

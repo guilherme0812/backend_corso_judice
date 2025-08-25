@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "studio": "npx prisma studio",
     "db:dev:migrate": "npx prisma migrate dev",
     "prebuild": "npm install && npx prisma generate",
@@ -25,6 +25,7 @@
     "nodemon": "^3.1.5",
     "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.3"
   },
   "dependencies": {

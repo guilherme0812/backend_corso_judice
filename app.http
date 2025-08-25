@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/api/companies
+GET http://localhost:3001/api/companies
 ###
 
 GET http://localhost:3000/api/company?id=2ac4ef6b-3ccd-4e1d-b321-58491e8aad
@@ -13,7 +13,6 @@ Content-Type: application/json
  "name": "Escritório teste",
  "cnpj": "11111111111"
 }
-
 ###
 PUT http://localhost:3000/api/company?id=abc
 Content-Type: application/json
