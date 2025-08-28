@@ -86,7 +86,7 @@ model Client {
   birthDate   DateTime?
   notes       String?
 
-  Company   Company? @relation(fields: [companyId], references: [id])
+  company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
   Case      Case[]
 

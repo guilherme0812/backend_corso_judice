@@ -8,6 +8,7 @@ import {
 
 export class ClientPrismaRepository implements IClientRepository {
   create(body: ClientCreate): Promise<ClientDataType> {
+    console.log("teste", body);
     return prismaClient.client.create({ data: body });
   }
   update(body: ClientCreate): Promise<ClientDataType> {

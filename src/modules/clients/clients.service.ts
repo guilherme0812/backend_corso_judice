@@ -29,14 +29,17 @@ export class ClientService {
     return client;
   }
 
-  async create(body: ClientCreate) {
+  async create({ companyId, ...body }: ClientCreate) {
     const alreadyCreated = await this.findOne(body.document);
 
     if (alreadyCreated) {
       throw createResponse("Não foi possível registrar esse clinte", 400);
     }
 
-    return this.clientRepository.create(body);
+    return this.clientRepository.create({
+      ...body,
+      company: { connect: { id: companyId } },
+    } as any);
   }
 
   async update(body: ClientDataType) {
