@@ -45,7 +45,7 @@ export class CasesController {
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
       await caseService.create(request.body as CreateCase);
-      reply.status(200).send(createResponse("User created"));
+      reply.status(200).send(createResponse("Case created"));
     } catch (error: any) {
       reply.status(error.status || 400).send({ message: error.message });
     }
@@ -60,7 +60,7 @@ export class CasesController {
       }
 
       await caseService.update(id, request.body as CaseDataType);
-      reply.status(200).send(createResponse("User updated"));
+      reply.status(200).send(createResponse("Case updated"));
     } catch (error: any) {
       reply.status(error.status || 400).send({ message: error.message });
     }
@@ -75,7 +75,7 @@ export class CasesController {
       }
 
       await caseService.remove(id);
-      reply.status(201).send(createResponse("User deleted"));
+      reply.status(201).send(createResponse("Case deleted"));
     } catch (error: any) {
       reply.status(error.status || 400).send({ message: error.message });
     }
