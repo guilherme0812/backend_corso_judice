@@ -1,64 +1,61 @@
-import { createResponse } from "../../utils/responseHelper";
-import {
-  ClientCreate,
-  ClientDataType,
-  GenericParams,
-  IClientRepository,
-} from "./repository/IClientRepository";
+import { createResponse } from '../../utils/responseHelper';
+import { ClientCreate, ClientDataType, GenericParams, IClientRepository } from './repository/IClientRepository';
 
 export class ClientService {
-  constructor(private readonly clientRepository: IClientRepository) {}
+    constructor(private readonly clientRepository: IClientRepository) {}
 
-  async findAll(params: GenericParams) {
-    return this.clientRepository.findAll(params);
-  }
-
-  async findOne(document: string) {
-    const client = await this.clientRepository.findOne(document);
-
-    return client;
-  }
-
-  async findUniqueOrThrow(document: string) {
-    const client = await this.findOne(document);
-
-    if (!client) {
-      throw { status: 404, message: "Client not found" };
+    async findAll(params: GenericParams) {
+        return this.clientRepository.findAll(params);
     }
 
-    return client;
-  }
+    async findOne(document: string) {
+        const client = await this.clientRepository.findOne(document);
 
-  async create({ companyId, ...body }: ClientCreate) {
-    const alreadyCreated = await this.findOne(body.document);
-
-    if (alreadyCreated) {
-      throw createResponse("Não foi possível registrar esse clinte", 400);
+        return client;
     }
 
-    return this.clientRepository.create({
-      ...body,
-      company: { connect: { id: companyId } },
-    } as any);
-  }
+    async findUniqueOrThrow(document: string) {
+        const client = await this.findOne(document);
 
-  async update(body: ClientDataType) {
-    const existClient = this.findOne(body.document);
+        if (!client) {
+            throw { status: 404, message: 'Client not found' };
+        }
 
-    if (!existClient) {
-      throw { status: 404, message: "Client not found" };
+        return client;
     }
 
-    return this.clientRepository.update(body);
-  }
+    async create({ companyId, ...body }: ClientCreate) {
+        const alreadyCreated = await this.findOne(body.document);
 
-  async remove(document: string) {
-    const existClient = this.findOne(document);
+        if (alreadyCreated) {
+            throw createResponse('Não foi possível registrar esse clinte', 400);
+        }
 
-    if (!existClient) {
-      throw { status: 404, message: "Client not found" };
+        console.log('Creating client for:', { ...body });
+
+        return this.clientRepository.create({
+            ...body,
+            company: { connect: { id: companyId } },
+        } as any);
     }
 
-    return this.clientRepository.remove(document);
-  }
+    async update(body: ClientDataType) {
+        const existClient = this.findOne(body.document);
+
+        if (!existClient) {
+            throw { status: 404, message: 'Client not found' };
+        }
+
+        return this.clientRepository.update(body);
+    }
+
+    async remove(document: string) {
+        const existClient = this.findOne(document);
+
+        if (!existClient) {
+            throw { status: 404, message: 'Client not found' };
+        }
+
+        return this.clientRepository.remove(document);
+    }
 }

@@ -73,18 +73,24 @@ model Company {
 }
 
 model Client {
-  document    String    @id @unique // Documento de identidade do cliente (CPF ou RG)
-  firstName   String
-  lastName    String
-  phone       String?
-  email       String?
-  hasWhatsapp Boolean   @default(false)
-  address     String?
-  cityId      String?
-  stateId     String?
-  countryId   String?
-  birthDate   DateTime?
-  notes       String?
+  document          String    @id @unique // Documento de identidade do cliente (CPF ou RG)
+  firstName         String
+  lastName          String
+  phone             String?   @db.VarChar(20)
+  email             String?   @db.VarChar(255)
+  hasWhatsapp       Boolean   @default(false)
+  addressStreet     String?   @map("address") // Corrige a semântica
+  addressNumber     String?   @map("number")
+  addressComplement String?
+  addressZipCode    String?   @db.VarChar(20)
+  zone              String?
+  birthDate         DateTime?
+  notes             String?
+  nacionality       String?
+
+  cityId    String?
+  stateId   String?
+  countryId String?
 
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
@@ -146,4 +152,30 @@ model Task {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Attorney {
+  id        String @id @default(uuid())
+  firstName String @map("first_name")
+  lastName  String @map("last_name")
+
+  licenceNumber       String  @unique @map("licence_number") @db.VarChar(255)
+  licenceJurisdiction String  @map("licence_jurisdiction") @db.VarChar(100)
+  // (Opcional) O código do país/país de registro (ex: 'BR', 'US', 'UK')
+  licenceCountryCode  String? @map("licence_country_code") @db.VarChar(100)
+
+  // COntact number
+  phone String?
+  email String  @unique
+
+  // Additional info
+  nationality         String?
+  maritalStatus       String? @map("marital_status")
+  professionalAddress String? @map("professional_address")
+
+  // extra
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("attorneys")
 }
