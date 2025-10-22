@@ -11,6 +11,7 @@ CREATE TABLE "attorneys" (
     "nationality" TEXT,
     "marital_status" TEXT,
     "professional_address" TEXT,
+    "companyId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -22,3 +23,6 @@ CREATE UNIQUE INDEX "attorneys_licence_number_key" ON "attorneys"("licence_numbe
 
 -- CreateIndex
 CREATE UNIQUE INDEX "attorneys_email_key" ON "attorneys"("email");
+
+-- AddForeignKey
+ALTER TABLE "attorneys" ADD CONSTRAINT "attorneys_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

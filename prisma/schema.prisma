@@ -66,8 +66,9 @@ model Company {
   Case      Case[]
 
   lastLoginAt DateTime?
-  createAt    DateTime  @default(now())
-  updateAt    DateTime  @default(now())
+  createAt    DateTime   @default(now())
+  updateAt    DateTime   @default(now())
+  Attorney    Attorney[]
 
   @@map("companies")
 }
@@ -161,19 +162,18 @@ model Attorney {
 
   licenceNumber       String  @unique @map("licence_number") @db.VarChar(255)
   licenceJurisdiction String  @map("licence_jurisdiction") @db.VarChar(100)
-  // (Opcional) O código do país/país de registro (ex: 'BR', 'US', 'UK')
   licenceCountryCode  String? @map("licence_country_code") @db.VarChar(100)
 
-  // COntact number
   phone String?
   email String  @unique
 
-  // Additional info
   nationality         String?
   maritalStatus       String? @map("marital_status")
   professionalAddress String? @map("professional_address")
 
-  // extra
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

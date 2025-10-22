@@ -12,6 +12,7 @@ import '@fastify/multipart';
 
 import * as dotenv from 'dotenv';
 import { documentsRoutes } from './modules/documents/document.route';
+import { attorneysRoutes } from './modules/Attorneys/attorneys.route';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ const start = async () => {
     app.register(casesRoutes, { prefix: '/api' });
     app.register(tasksRoutes, { prefix: '/api' });
     app.register(documentsRoutes, { prefix: '/api' });
+    app.register(attorneysRoutes, { prefix: '/api' });
 
     try {
         await app.listen({
