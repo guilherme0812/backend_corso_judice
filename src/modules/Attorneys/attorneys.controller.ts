@@ -24,7 +24,13 @@ export class AttorneyController {
 
     async register(request: FastifyRequest, reply: FastifyReply) {
         try {
-            const data = await attorneyService.create(request.body as CreateAttorney);
+            const body = {
+                ...(request.body as CreateAttorney),
+                companyId: (request as any).user?.companyId,
+            };
+
+            console.log('body: ', body);
+            const data = await attorneyService.create(body as CreateAttorney);
             reply.status(201).send(data);
         } catch (error: any) {
             reply.status(400).send({ message: error.message });

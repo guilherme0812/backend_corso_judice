@@ -5,8 +5,8 @@ import { authMiddleware } from '../../middleware/authMiddleware';
 const attorneyController = new AttorneyController();
 
 export const attorneysRoutes = async (fastify: FastifyInstance) => {
-    fastify.get('/attorney', attorneyController.findAll);
-    fastify.post('/attorney', attorneyController.register);
-    fastify.put('/attorney', attorneyController.update);
-    fastify.delete('/attorney', attorneyController.remove);
+    fastify.get('/attorney', { preHandler: authMiddleware }, attorneyController.findAll);
+    fastify.post('/attorney', { preHandler: authMiddleware }, attorneyController.register);
+    fastify.put('/attorney', { preHandler: authMiddleware }, attorneyController.update);
+    fastify.delete('/attorney', { preHandler: authMiddleware }, attorneyController.remove as any);
 };
