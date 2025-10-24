@@ -1,3 +1,8 @@
+export type GenericParams = {
+    companyId?: string | null;
+    name?: string;
+};
+
 export interface AttorneyDataType {
     id: string;
     firstName: string;
@@ -19,13 +24,8 @@ export type CreateAttorney = Omit<AttorneyDataType, 'id' | 'createdAt' | 'update
     companyId: string;
 };
 
-export interface FindAllParameters {
-    //   companyId?: string;
-    //   clientId?: string;
-}
-
 export interface IAttorneyRepository {
-    findAll: (params?: FindAllParameters) => Promise<AttorneyDataType[]>;
+    findAll: (params: GenericParams) => Promise<AttorneyDataType[]>;
     findOne: (id: string) => Promise<AttorneyDataType | null>;
     create: (body: CreateAttorney) => Promise<AttorneyDataType>;
     update(data: AttorneyDataType): Promise<AttorneyDataType>;

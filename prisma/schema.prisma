@@ -74,20 +74,25 @@ model Company {
 }
 
 model Client {
-  document          String    @id @unique // Documento de identidade do cliente (CPF ou RG)
-  firstName         String
-  lastName          String
-  phone             String?   @db.VarChar(20)
-  email             String?   @db.VarChar(255)
-  hasWhatsapp       Boolean   @default(false)
-  addressStreet     String?   @map("address") // Corrige a semântica
-  addressNumber     String?   @map("number")
-  addressComplement String?
-  addressZipCode    String?   @db.VarChar(20)
-  zone              String?
-  birthDate         DateTime?
-  notes             String?
-  nacionality       String?
+  document               String    @id @unique // Documento de identidade do cliente (CPF ou RG)
+  officialId             String?   @unique @db.VarChar(7) //6470051
+  officialIdIssuingBody  String?   @db.VarChar(100)
+  officialIdissuingState String?   @db.VarChar(100)
+  firstName              String
+  lastName               String
+  phone                  String?   @db.VarChar(20)
+  email                  String?   @db.VarChar(255)
+  hasWhatsapp            Boolean   @default(false)
+  addressStreet          String?   @map("address") // Corrige a semântica
+  addressNumber          String?   @map("number")
+  addressComplement      String?
+  addressZipCode         String?   @db.VarChar(20)
+  zone                   String?
+  birthDate              DateTime?
+  notes                  String?
+  nacionality            String?
+  maritalStatus          String?   @db.VarChar(100)
+  profession             String?   @db.VarChar(255)
 
   cityId    String?
   stateId   String?

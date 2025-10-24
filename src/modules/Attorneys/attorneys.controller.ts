@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { AttorneyService } from './attorneys.service';
 import { AttorneyPrismaRepository } from './repository/AttorneyPrismaRepository';
-import { AttorneyDataType, CreateAttorney } from './repository/IAttorneyRepository';
+import { AttorneyDataType, CreateAttorney, GenericParams } from './repository/IAttorneyRepository';
 
 const attorneyRepository = new AttorneyPrismaRepository();
 const attorneyService = new AttorneyService(attorneyRepository);
@@ -11,9 +11,14 @@ interface UserQuery {
 }
 
 export class AttorneyController {
-    async findAll(request: FastifyRequest, reply: FastifyReply) {
+    async findAll(request: FastifyRequest<{ Querystring: GenericParams }>, reply: FastifyReply) {
         try {
-            const result = await attorneyService.findAll();
+            const params: GenericParams = {
+                companyId: request.user?.companyId,
+                name: request.query.name,
+            };
+
+            const result = await attorneyService.findAll(params);
             return reply.status(200).send(result);
         } catch (error: any) {
             return reply.status(error.status || 500).send({

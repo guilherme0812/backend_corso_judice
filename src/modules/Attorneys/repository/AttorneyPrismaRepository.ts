@@ -1,9 +1,24 @@
 import { prismaClient } from '../../../prisma/prismaClient';
-import { AttorneyDataType, CreateAttorney, FindAllParameters, IAttorneyRepository } from './IAttorneyRepository';
+import { AttorneyDataType, CreateAttorney, GenericParams, IAttorneyRepository } from './IAttorneyRepository';
 
 export class AttorneyPrismaRepository implements IAttorneyRepository {
-    findAll(params?: FindAllParameters): Promise<AttorneyDataType[]> {
-        const data = prismaClient.attorney.findMany();
+    findAll({ companyId, name }: GenericParams): Promise<AttorneyDataType[]> {
+        const whereClause: any = {};
+
+        if (companyId) {
+            whereClause.companyId = companyId;
+        }
+
+        if (name) {
+            whereClause.OR = [
+                { firstName: { contains: name, mode: 'insensitive' } },
+                { lastName: { contains: name, mode: 'insensitive' } },
+            ];
+        }
+
+        const data = prismaClient.attorney.findMany({
+            where: whereClause,
+        });
         return data;
     }
 

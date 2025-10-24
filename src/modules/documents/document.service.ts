@@ -1,8 +1,10 @@
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
+import expressions from 'docxtemplater/expressions.js';
 
 export class DocumentService {
     async replacePlaceholders(buffer: Buffer, data: Record<string, any>): Promise<Buffer> {
+        console.log('data: ', data);
         const zip = new PizZip(buffer);
         const doc = new Docxtemplater(zip, {
             paragraphLoop: true,
@@ -11,6 +13,7 @@ export class DocumentService {
                 start: '[[', // usa [[name]] ao invés de {{name}}
                 end: ']]',
             },
+            parser: expressions,
         });
 
         // Substitui as tags no formato {{campo}}

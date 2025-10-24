@@ -1,10 +1,10 @@
-import { AttorneyDataType, CreateAttorney, IAttorneyRepository } from './repository/IAttorneyRepository';
+import { AttorneyDataType, CreateAttorney, GenericParams, IAttorneyRepository } from './repository/IAttorneyRepository';
 
 export class AttorneyService {
     constructor(private readonly attorneyRepository: IAttorneyRepository) {}
 
-    async findAll() {
-        return this.attorneyRepository.findAll();
+    async findAll(params: GenericParams) {
+        return this.attorneyRepository.findAll(params);
     }
 
     async findOne(id: string) {

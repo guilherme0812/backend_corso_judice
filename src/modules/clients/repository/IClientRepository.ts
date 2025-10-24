@@ -23,6 +23,9 @@ export interface ClientCreate {
 
 export interface ClientDataType {
     document: string;
+    officialId: string | null;
+    officialIdIssuingBody: string | null;
+    officialIdissuingState: string | null;
     firstName: string;
     lastName: string;
     phone: string | null;
@@ -34,6 +37,8 @@ export interface ClientDataType {
     addressZipCode: string | null;
     zone: string | null;
     birthDate: Date | null;
+    maritalStatus: string | null;
+    profession: string | null;
     notes: string | null;
     nacionality: string | null;
     cityId: string | null;
