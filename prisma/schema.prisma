@@ -184,3 +184,13 @@ model Attorney {
 
   @@map("attorneys")
 }
+
+model Graph {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(255)
+  description String   @default("")
+  config      Json
+  archetype   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
