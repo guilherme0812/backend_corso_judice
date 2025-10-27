@@ -47,6 +47,7 @@ const start = async () => {
             host: '0.0.0.0',
         });
         console.log(`app running on http://localhost:${process.env.PORT}`);
+        //
     } catch (err) {
         app.log.error(err);
         process.exit(1);
