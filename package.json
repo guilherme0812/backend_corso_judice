@@ -34,6 +34,8 @@
     "dependencies": {
         "@fastify/cors": "^10.0.1",
         "@fastify/multipart": "^9.2.1",
+        "@langchain/core": "^0.3.78",
+        "@langchain/groq": "^0.2.4",
         "@prisma/client": "^5.19.1",
         "@types/bcryptjs": "^2.4.6",
         "@types/jsonwebtoken": "^9.0.7",
@@ -46,8 +48,11 @@
         "express": "^4.19.2",
         "fastify": "^5.0.0",
         "jsonwebtoken": "^9.0.2",
+        "langchain": "^0.3.35",
         "multer": "^2.0.2",
-        "pizzip": "^3.2.0"
+        "pizzip": "^3.2.0",
+        "zod": "^3.25.76",
+        "zod-to-json-schema": "^3.24.6"
     },
     "keywords": []
 }

@@ -65,11 +65,12 @@ model Company {
   documents Document[]
   Case      Case[]
 
-  lastLoginAt DateTime?
-  createAt    DateTime   @default(now())
-  updateAt    DateTime   @default(now())
-  Attorney    Attorney[]
-  Graph       Graph[]
+  lastLoginAt           DateTime?
+  createAt              DateTime               @default(now())
+  updateAt              DateTime               @default(now())
+  Attorney              Attorney[]
+  Graph                 Graph[]
+  CustomDocumentMapping CustomDocumentMapping?
 
   @@map("companies")
 }
@@ -177,11 +178,10 @@ model Attorney {
   maritalStatus       String? @map("marital_status")
   professionalAddress String? @map("professional_address")
 
-  company   Company @relation(fields: [companyId], references: [id])
-  companyId String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
 
   @@map("attorneys")
 }
@@ -201,4 +201,18 @@ model Graph {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("graphs")
+}
+
+model CustomDocumentMapping {
+  id String @id @default(uuid())
+
+  companyId String  @unique
+  company   Company @relation(fields: [companyId], references: [id])
+
+  customMappingJson Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("custom_document_mapping")
 }
