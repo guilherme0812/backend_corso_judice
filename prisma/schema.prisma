@@ -69,6 +69,7 @@ model Company {
   createAt    DateTime   @default(now())
   updateAt    DateTime   @default(now())
   Attorney    Attorney[]
+  Graph       Graph[]
 
   @@map("companies")
 }
@@ -186,11 +187,18 @@ model Attorney {
 }
 
 model Graph {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(255)
-  description String   @default("")
+  id          String  @id @default(uuid())
+  name        String  @db.VarChar(255)
+  type        String  @db.VarChar(255)
+  description String  @default("")
   config      Json
   archetype   String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("graphs")
 }
