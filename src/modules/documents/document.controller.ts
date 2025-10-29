@@ -1,7 +1,12 @@
+import { createResponse } from '../../utils/responseHelper';
+import { GraphService } from '../graphs/graphs.service';
+import { GraphPrismaRepository } from '../graphs/repository/GraphPrismaRepository';
 import { DocumentService } from './document.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 const documentService = new DocumentService();
+const graphRepository = new GraphPrismaRepository();
+const graphService = new GraphService(graphRepository);
 export class DocumentController {
     async uploadAndReplace(request: FastifyRequest, reply: FastifyReply) {
         try {
@@ -28,7 +33,10 @@ export class DocumentController {
                 parsedData = JSON.parse(dataField.value as string);
             }
 
-            const newFile = await documentService.replacePlaceholders(buffer, parsedData);
+            const mappedJson = await graphService.processMessage('json-conversion', parsedData);
+            if (!mappedJson) createResponse('error on generate mappedJson', 400);
+
+            const newFile = await documentService.replacePlaceholders(buffer, mappedJson);
 
             reply.header('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
             reply.header('Content-Disposition', 'attachment; filename=documento-gerado.docx');

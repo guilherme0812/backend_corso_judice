@@ -36,6 +36,7 @@
         "@fastify/multipart": "^9.2.1",
         "@langchain/core": "^0.3.78",
         "@langchain/groq": "^0.2.4",
+        "@langchain/langgraph": "^0.2.68",
         "@prisma/client": "^5.19.1",
         "@types/bcryptjs": "^2.4.6",
         "@types/jsonwebtoken": "^9.0.7",

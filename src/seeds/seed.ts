@@ -2,6 +2,7 @@ import { prismaClient } from '../prisma/prismaClient';
 import { seedAttorneys } from './attorney';
 import { seedClients } from './client';
 import { seedCompanies } from './company';
+import { seedCustomDocumentMapping } from './customDocumentMapping';
 import { seedUsers } from './user';
 
 async function runSeed() {
@@ -11,6 +12,7 @@ async function runSeed() {
     await seedUsers();
     await seedAttorneys();
     await seedClients();
+    await seedCustomDocumentMapping();
 
     console.log('✅ All seeds completed.');
 

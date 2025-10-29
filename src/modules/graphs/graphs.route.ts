@@ -9,5 +9,5 @@ export const graphsRoutes = async (fastify: FastifyInstance) => {
     fastify.post('/graph', { preHandler: authMiddleware }, graphController.register);
     fastify.put('/graph', { preHandler: authMiddleware }, graphController.update);
     fastify.delete('/graph', { preHandler: authMiddleware }, graphController.remove as any);
-    fastify.post('/graph/test', graphController.test);
+    fastify.post('/graph/jsonConvertion', graphController.jsonConvertion);
 };

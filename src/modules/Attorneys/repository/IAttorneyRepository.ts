@@ -15,9 +15,9 @@ export interface AttorneyDataType {
     nationality: string | null;
     maritalStatus: string | null;
     professionalAddress: string | null;
-    companyId: string;
     createdAt: Date;
     updatedAt: Date;
+    companyId: string | null;
 }
 
 export type CreateAttorney = Omit<AttorneyDataType, 'id' | 'createdAt' | 'updatedAt'> & {

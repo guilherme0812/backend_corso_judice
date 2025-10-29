@@ -16,6 +16,7 @@ export class GraphPrismaRepository implements IGraphRepository {
         const data = prismaClient.graph.findMany({
             where: whereClause,
         });
+
         return data;
     }
 

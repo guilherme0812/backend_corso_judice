@@ -59,7 +59,7 @@ export class GraphController {
         }
     }
 
-    async test(request: FastifyRequest, reply: FastifyReply) {
+    async jsonConvertion(request: FastifyRequest, reply: FastifyReply) {
         try {
             const body = request.body;
 
