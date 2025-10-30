@@ -5,8 +5,10 @@ import { JsonConversionAgent } from '../JsonConversionGraph';
 import { z } from 'zod';
 import { Command } from '@langchain/langgraph';
 import { NodeId } from '../nodeIds';
+import { JsonOutputParser } from '@langchain/core/output_parsers';
 
-const ConvertedJsonSchema = z.record(z.any());
+const jsonSchema = z.record(z.any());
+const parser = new JsonOutputParser();
 
 export const getJsonConversionAgent = (graph: JsonConversionAgent) => {
     const jsonConversion = async (state: typeof graph.stateDefinition.State) => {
@@ -23,28 +25,23 @@ export const getJsonConversionAgent = (graph: JsonConversionAgent) => {
 
         const prompt = ChatPromptTemplate.fromTemplate(graph.DEFAULTS.jsonConversionPrompt);
 
-        const chain = prompt.pipe(graph.model);
+        const chain = prompt.pipe(graph.model).pipe(parser);
 
         const response = await chain.invoke({
-            exemple: { name: 'meunome' },
+            exemple: {
+                base_json: {
+                    name: 'Fulano',
+                },
+                mapping_json: {
+                    name: 'meunome',
+                },
+            },
             base_json: JSON.stringify(base_json || graph.DEFAULTS.defaultBaseJson, null, 2),
             mapping_json: JSON.stringify(mapping_json, null, 2),
         });
 
-        const text = response.content;
-
-        console.log('response: ', response);
-
-        // Parseia o JSON retornado
-        let parsed;
-        try {
-            parsed = JSON.parse(text as any);
-        } catch {
-            throw new Error('Falha ao parsear o JSON retornado pelo modelo.');
-        }
-
-        // Valida com Zod
-        const validation = ConvertedJsonSchema.safeParse(parsed);
+        // // Valida com Zod
+        const validation = jsonSchema.safeParse(response);
         if (!validation.success) {
             throw new Error('JSON retornado é inválido: ' + validation.error.message);
         }

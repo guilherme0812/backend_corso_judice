@@ -10,10 +10,12 @@ Você é um assistente que transforma JSONs conforme um mapa de chaves fornecido
 ### EXEMPLO:
 {exemple}
      
- significa que name deve se tornar meunome.
+ significa que  deve retornar um json  con chame 'meunome' e valor 'Fulano'.
   
-2. Você deve gerar um novo JSON com as chaves renomeadas de acordo com o mapping.
-3. A saída deve conter apenas o JSON final.
+2. Você deve gerar um novo JSON com as chaves renomeadas de acordo com o mapping_json.
+3. as chaves dos novo JSON devem ser criadas exatamente como està no mapping_json, nao coloque outra chave e nao invente nada.
+4. A saída deve conter apenas o JSON final.
+5. Nao me sugira codigo Python, retorne apenas json alterado sem nenhuma informaçao adicional de forma que eu consiga usar o JSON.parse
 
 ### Entrada:
 base_json:
@@ -22,7 +24,7 @@ base_json:
 mapping_json:
 {mapping_json}
 
-Nao me sugira codigo Python, retorne o json alterado
+Nao me sugira codigo Python, retorne apenas json alterado sem nenhuma informaçao adicional de forma que eu consiga usar o JSON.parse
 
 ### Saída esperada:
 `,

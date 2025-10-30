@@ -16,6 +16,8 @@ export class DocumentService {
             parser: expressions,
         });
 
+        console.log('---- data ----', data);
+
         // Substitui as tags no formato {{campo}}
         doc.render(data);
 
