@@ -100,7 +100,7 @@ model Client {
   stateId   String?
   countryId String?
 
-  company   Company? @relation(fields: [companyId], references: [id])
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?
   Case      Case[]
 
@@ -118,7 +118,7 @@ model Case {
   client   Client @relation(fields: [clientId], references: [document])
   clientId String
 
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String // Empresa responsável pelo processo
 
   @@map("cases")
@@ -178,10 +178,11 @@ model Attorney {
   maritalStatus       String? @map("marital_status")
   professionalAddress String? @map("professional_address")
 
+  Company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Company   Company? @relation(fields: [companyId], references: [id])
-  companyId String?
 
   @@map("attorneys")
 }
@@ -194,11 +195,10 @@ model Graph {
   config      Json
   archetype   String?
 
-  company   Company @relation(fields: [companyId], references: [id])
-  companyId String
-
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  Company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
 
   @@map("graphs")
 }
@@ -207,7 +207,7 @@ model CustomDocumentMapping {
   id String @id @default(uuid())
 
   companyId String  @unique
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   customMappingJson Json?
 

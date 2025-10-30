@@ -14,6 +14,7 @@ import * as dotenv from 'dotenv';
 import { documentsRoutes } from './modules/documents/document.route';
 import { attorneysRoutes } from './modules/Attorneys/attorneys.route';
 import { graphsRoutes } from './modules/graphs/graphs.route';
+import { customDocumentMappingRoutes } from './modules/CustomDocumentMapping/customDocumentMapping.route';
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ const start = async () => {
     app.register(documentsRoutes, { prefix: '/api' });
     app.register(attorneysRoutes, { prefix: '/api' });
     app.register(graphsRoutes, { prefix: '/api' });
+    app.register(customDocumentMappingRoutes, { prefix: '/api' });
 
     try {
         await app.listen({

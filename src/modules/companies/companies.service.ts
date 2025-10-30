@@ -1,15 +1,20 @@
 import { createResponse } from '../../utils/responseHelper';
+import { ICustomDocumentMappingRepository } from '../CustomDocumentMapping/repository/ICustomDocumentMappingRepository';
+import { jsonConversionDefaults } from '../graphs/graphs/JsonConversionGraph/metadata/defaults';
 import { CompanyCreate, CompanyDataType, ICompanyRepository } from './repositories/ICompanyRepository';
 
 export class CompanyService {
-    constructor(private readonly companyRepository: ICompanyRepository) {}
+    constructor(
+        private readonly companyRepository: ICompanyRepository,
+        private readonly customDocumentMappingRepository: ICustomDocumentMappingRepository,
+    ) {}
 
     async findAll() {
         return this.companyRepository.findAll();
     }
 
     async create(data: CompanyCreate) {
-        await this.companyRepository.create({
+        const company = await this.companyRepository.create({
             id: data?.id,
             name: data.name,
             cnpj: data.cnpj,
@@ -30,6 +35,11 @@ export class CompanyService {
             foundedAt: data.foundedAt,
             documentStorageUrl: data.documentStorageUrl,
             isActive: data.isActive !== undefined ? data.isActive : true,
+        });
+
+        await this.customDocumentMappingRepository.create({
+            companyId: company.id,
+            customMappingJson: jsonConversionDefaults.defaultBaseJson,
         });
 
         return createResponse('Empresa criada com sucesso');

@@ -2,9 +2,11 @@ import { CompanyPrismaRepository } from './repositories/CompanyPrismaRepository'
 import { CompanyService } from './companies.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createResponse } from '../../utils/responseHelper';
+import { CustomDocumentMappingPrismaRepository } from '../CustomDocumentMapping/repository/CustomDocumentMappingPrismaRepository';
 
 const companyRepository = new CompanyPrismaRepository();
-const companyService = new CompanyService(companyRepository);
+const customDocumentMappingRepository = new CustomDocumentMappingPrismaRepository();
+const companyService = new CompanyService(companyRepository, customDocumentMappingRepository);
 
 export interface CompanyQuery {
     id: string;
