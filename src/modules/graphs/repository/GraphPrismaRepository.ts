@@ -17,24 +17,24 @@ export class GraphPrismaRepository implements IGraphRepository {
             where: whereClause,
         });
 
-        return data;
+        return data as any;
     }
 
     findOne(id: string): Promise<GraphDataType | null> {
-        return prismaClient.graph.findUnique({ where: { id } });
+        return prismaClient.graph.findUnique({ where: { id } }) as any;
     }
     create(body: CreateGraph): Promise<GraphDataType> {
-        return prismaClient.graph.create({ data: body as any });
+        return prismaClient.graph.create({ data: body as any }) as any;
     }
 
     update(body: GraphDataType): Promise<GraphDataType> {
         return prismaClient.graph.update({
             where: { id: body.id },
             data: body as any,
-        });
+        }) as any;
     }
 
     remove(id: string): Promise<GraphDataType> {
-        return prismaClient.graph.delete({ where: { id } });
+        return prismaClient.graph.delete({ where: { id } }) as any;
     }
 }

@@ -6,7 +6,7 @@ import { CompanyCreate, CompanyDataType, ICompanyRepository } from './repositori
 export class CompanyService {
     constructor(
         private readonly companyRepository: ICompanyRepository,
-        private readonly customDocumentMappingRepository: ICustomDocumentMappingRepository,
+        private readonly customDocumentMappingRepository?: ICustomDocumentMappingRepository,
     ) {}
 
     async findAll() {
@@ -14,6 +14,7 @@ export class CompanyService {
     }
 
     async create(data: CompanyCreate) {
+        if (!this.customDocumentMappingRepository) throw 'custom document not provided';
         const company = await this.companyRepository.create({
             id: data?.id,
             name: data.name,
