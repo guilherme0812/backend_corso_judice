@@ -13,12 +13,18 @@ interface UserQuery {
 export class AttorneyController {
     async findAll(request: FastifyRequest<{ Querystring: GenericParams }>, reply: FastifyReply) {
         try {
-            const params: GenericParams = {
-                companyId: request.user?.companyId,
-                name: request.query.name,
-            };
+            const result = await attorneyService.findAll(request.query);
+            return reply.status(200).send(result);
+        } catch (error: any) {
+            return reply.status(error.status || 500).send({
+                message: error.message || 'Internal server error',
+            });
+        }
+    }
 
-            const result = await attorneyService.findAll(params);
+    async findAllByUser(request: FastifyRequest<{ Querystring: GenericParams }>, reply: FastifyReply) {
+        try {
+            const result = await attorneyService.findAll(request.query, request.user);
             return reply.status(200).send(result);
         } catch (error: any) {
             return reply.status(error.status || 500).send({

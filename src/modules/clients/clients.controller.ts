@@ -35,7 +35,27 @@ export class ClientsController {
                 name: request.query.name,
             };
 
-            const result = await clientService.findAll(params);
+            const result = await clientService.findAll(request.query);
+            return reply.status(200).send(result);
+        } catch (error: any) {
+            return reply.status(error.status || 500).send({
+                message: error.message || 'Internal server error',
+            });
+        }
+    }
+
+    async findAllByUser(
+        request: FastifyRequest<{ Querystring: GenericParams }> & {
+            user: UserDataType;
+        },
+        reply: FastifyReply,
+    ) {
+        try {
+            const params: GenericParams = {
+                name: request.query.name,
+            };
+
+            const result = await clientService.findAll(params, request.user);
             return reply.status(200).send(result);
         } catch (error: any) {
             return reply.status(error.status || 500).send({

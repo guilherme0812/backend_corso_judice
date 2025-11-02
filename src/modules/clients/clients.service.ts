@@ -1,10 +1,19 @@
 import { createResponse } from '../../utils/responseHelper';
+import { Role, UserDataType } from '../users/repository/IUserRepository';
 import { ClientCreate, ClientDataType, GenericParams, IClientRepository } from './repository/IClientRepository';
 
 export class ClientService {
     constructor(private readonly clientRepository: IClientRepository) {}
 
-    async findAll(params: GenericParams) {
+    async findAll(queryParams: GenericParams, user?: UserDataType) {
+        const params: GenericParams = queryParams;
+
+        if (params.name) queryParams.name = params.name;
+
+        if (user) {
+            params.companyId = user?.companyId;
+        }
+
         return this.clientRepository.findAll(params);
     }
 

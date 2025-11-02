@@ -7,17 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserStatus {
+  PENDING // Criado, mas ainda sem empresa vinculada
+  ACTIVE // Ativo e com empresa associada
+  INACTIVE // Inativo por escolha do usuário ou administrador
+  SUSPENDED // Bloqueado temporariamente
+  DELETED // Conta removida (opcional)
+}
+
 model User {
-  id             String  @id @default(uuid())
-  email          String  @unique
+  id             String     @id @default(uuid())
+  email          String     @unique
   password       String?
-  role           Role    @default(employee)
+  role           Role       @default(employee)
   firstName      String
   lastName       String
   phone          String?
-  hasWhatsapp    Boolean @default(false)
+  hasWhatsapp    Boolean    @default(false)
   profilePicture String?
-  isActive       Boolean @default(true)
+  status         UserStatus @default(PENDING)
 
   lastLoginAt DateTime?
   createAt    DateTime  @default(now())

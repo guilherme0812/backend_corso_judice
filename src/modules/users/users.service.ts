@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { IUserRepository, LoginBody, UserCreate, UserDataType } from './repository/IUserRepository';
+import { GenericParams, IUserRepository, LoginBody, Role, UserCreate, UserDataType } from './repository/IUserRepository';
 
 export class UserService {
     constructor(private readonly userRepository: IUserRepository) {}
@@ -75,8 +75,14 @@ export class UserService {
         return { token, ...userData };
     }
 
-    async findAll() {
-        return this.userRepository.findAll();
+    async findAll(queryParam: GenericParams, user?: UserDataType) {
+        const params: GenericParams = {};
+
+        if (queryParam.name) params.name;
+
+        if (user) params.companyId = user?.companyId;
+
+        return this.userRepository.findAll(params);
     }
 
     async update(body: UserCreate) {
