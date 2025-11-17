@@ -1,5 +1,4 @@
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { GraphService } from '../../../graphs.service';
 import { JsonConversionAgent } from '../JsonConversionGraph';
 
 import { z } from 'zod';
@@ -40,7 +39,7 @@ export const getJsonConversionAgent = (graph: JsonConversionAgent) => {
             mapping_json: JSON.stringify(mapping_json, null, 2),
         });
 
-        // // Valida com Zod
+        // Valida com Zod
         const validation = jsonSchema.safeParse(response);
         if (!validation.success) {
             throw new Error('JSON retornado é inválido: ' + validation.error.message);

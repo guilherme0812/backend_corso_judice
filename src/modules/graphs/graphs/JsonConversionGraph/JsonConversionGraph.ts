@@ -73,10 +73,6 @@ export class JsonConversionAgent extends BaseGraph {
         this.jsonConversionData = data;
         const graphAgent = await this.getGraphAgent();
 
-        // {
-        //   messages: [ { meunome: 'Guilherme', idade: '19', cidade: 'San Francisco' } ],
-        //   next: '__end__'
-        // }
         const result = await graphAgent.invoke({});
         let messages: any[] = result.messages;
 
