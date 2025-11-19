@@ -1,7 +1,7 @@
 export enum NodeId {
     END = '__end__',
     // SUPERVISOR = 'supervisorAgent',
-    JSON_CONVERSION = 'jsonConversionAgent',
+    JURISPRUDENCE_AGENT = 'jurisprudenceAgent',
     // WHO_IS_THE_ARTIST = 'whoIsTheArtistAgent',
     // GENERATE_LYRICS = 'generateLyricsAgent',
 }
@@ -9,5 +9,5 @@ export enum NodeId {
 export const DOMAIN_AGENTS: NodeId[] = [
     // NodeId.WHO_IS_THE_ARTIST,
     //  NodeId.GENERATE_LYRICS,
-    NodeId.JSON_CONVERSION,
+    NodeId.JURISPRUDENCE_AGENT,
 ];

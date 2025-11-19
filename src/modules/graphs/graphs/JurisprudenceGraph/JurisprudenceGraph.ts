@@ -3,24 +3,23 @@ import { z } from 'zod';
 import { ChatGroq } from '@langchain/groq';
 import { Annotation, StateGraph } from '@langchain/langgraph';
 import { NodeId } from './nodeIds';
-import { getJsonConversionAgent } from './agents/JsonConversionAgent';
-import { jsonConversionDefaults } from './metadata/defaults';
+import { jurisprudenceAgentFunction } from './agents/jusrisprudenceAgent';
+import { jurisprudenceDefaults } from './metadata/defaults';
 
 // Esquema Zod para validar o JSON final
 const ConvertedJsonSchema = z.record(z.any());
 
-export type JsonConversionDataType = {
-    base_json?: Record<string, any>;
-    mapping_json: Record<string, any>;
+export type JurisprudenceDataType = {
+    message: string
 };
-export class JsonConversionAgent extends BaseGraph {
+export class JurisprudenceAgent extends BaseGraph {
     constructor() {
         super();
     }
 
     type = 'json-conversion';
 
-    jsonConversionData?: JsonConversionDataType;
+    jurisprudenceData?: JurisprudenceDataType;
 
     stateDefinition = Annotation.Root({
         messages: Annotation<any>({
@@ -39,7 +38,7 @@ export class JsonConversionAgent extends BaseGraph {
         }),
     });
 
-    DEFAULTS = jsonConversionDefaults;
+    DEFAULTS = jurisprudenceDefaults;
 
     public model = new ChatGroq({
         apiKey: process.env.GROQ_API_KEY!,
@@ -48,14 +47,14 @@ export class JsonConversionAgent extends BaseGraph {
 
     public async initializeGraph() {
         // Build specialized agents via ReAct
-        const jsonConversionAgent = getJsonConversionAgent(this);
+        const jsonConversionAgent = jurisprudenceAgentFunction(this);
 
         const graph = new StateGraph(this.stateDefinition)
-            .addNode(NodeId.JSON_CONVERSION, jsonConversionAgent, {
+            .addNode(NodeId.JURISPRUDENCE_AGENT, jsonConversionAgent, {
                 ends: [NodeId.END],
-                metadata: { agentName: NodeId.JSON_CONVERSION },
+                metadata: { agentName: NodeId.JURISPRUDENCE_AGENT },
             })
-            .addEdge('__start__', NodeId.JSON_CONVERSION);
+            .addEdge('__start__', NodeId.JURISPRUDENCE_AGENT);
         return graph;
     }
 
@@ -70,8 +69,8 @@ export class JsonConversionAgent extends BaseGraph {
         return compiled;
     }
 
-    async invokeGraph(data: JsonConversionDataType) {0
-        this.jsonConversionData = data;
+    async invokeGraph(data: JurisprudenceDataType) {
+        this.jurisprudenceData = data;
         const graphAgent = await this.buildGraphAgent();
 
         const result = await graphAgent.invoke({});

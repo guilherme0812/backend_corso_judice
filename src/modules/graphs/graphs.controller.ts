@@ -69,4 +69,29 @@ export class GraphController {
             reply.status(400).send({ message: error.message });
         }
     }
+   
+    async jurisprudence(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const body = request.body;
+
+            const data = await graphService.processMessage('jurisprudence', body as CreateGraph);
+            reply.status(200).send(data);
+        } catch (error: any) {
+            reply.status(400).send({ message: error.message });
+        }
+    }
+    
+    async sendMessage(request: FastifyRequest<{Params: {type: string}}>, reply: FastifyReply) {
+        try {
+            const body = request.body;
+            const type = request.params.type
+
+            const data = await graphService.processMessage(type, body as CreateGraph);
+            reply.status(200).send(data);
+        } catch (error: any) {
+            reply.status(400).send({ message: error.message });
+        }
+    }
+
+
 }

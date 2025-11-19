@@ -13,12 +13,12 @@ export abstract class BaseGraph {
         throw new Error('Method not implemented. This method should be implemented by the child class');
     }
 
-    public async getGraphAgent(): Promise<any> {
+    public async buildGraphAgent(): Promise<any> {
         if (this.graphAgent) return this.graphAgent;
     }
 
     public async invokeGraph(data: any): Promise<any> {
-        this.getGraphAgent();
+        this.buildGraphAgent();
         throw new Error('Method not implemented. This method should be implemented by the child class');
     }
 }
