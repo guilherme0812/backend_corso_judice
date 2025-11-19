@@ -29,8 +29,6 @@ export const jurisprudenceAgentFunction = (graph: JurisprudenceAgent) => {
             userMessage,
         });
 
-        console.log('response: ', response?.content);
-
         // Valida com Zod
         // const validation = jsonSchema.safeParse(response);
         // if (!validation.success) {
