@@ -1,6 +1,5 @@
-import { Role } from '@prisma/client';
 import { prismaClient } from '../../../prisma/prismaClient';
-import { UserCreate, UserDataType, IUserRepository, GenericParams } from './IUserRepository';
+import { UserCreate, UserDataType, IUserRepository, GenericParams, Role } from './IUserRepository';
 
 export class UserPrismaRepository implements IUserRepository {
     async findAll({ companyId, name }: GenericParams): Promise<UserDataType[]> {

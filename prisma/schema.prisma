@@ -1,5 +1,12 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -33,7 +40,6 @@ model User {
 
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
-  Task      Task[]
 
   @@map("users")
 }
@@ -110,32 +116,10 @@ model Client {
 
   company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?
+
   Case      Case[]
 
   @@map("clients")
-}
-
-model Case {
-  id          String     @id @default(uuid())
-  caseNumber  String     @unique
-  description String
-  status      CaseStatus @default(PENDING)
-  openedAt    DateTime   @default(now())
-  closedAt    DateTime?
-
-  client   Client @relation(fields: [clientId], references: [document])
-  clientId String
-
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId String // Empresa responsável pelo processo
-
-  @@map("cases")
-}
-
-enum CaseStatus {
-  PENDING
-  OPEN
-  CLOSED
 }
 
 model Document {
@@ -147,27 +131,6 @@ model Document {
   companyId String
 
   @@map("documents")
-}
-
-model Finance {
-  id        Int      @id @default(autoincrement())
-  amount    Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("finances")
-}
-
-model Task {
-  id          String     @id @default(uuid())
-  name        String
-  description String
-  status      CaseStatus @default(PENDING)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
 }
 
 model Attorney {
@@ -223,4 +186,106 @@ model CustomDocumentMapping {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("custom_document_mapping")
+}
+
+// financial
+model FinancialCategory {
+  id        String       @id @default(uuid())
+  name      String
+  type      CategoryType // RECEITA ou DESPESA
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  transactions FinancialTransaction[]
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model Case {
+  id           String     @id @default(cuid())
+  title        String
+  lawyerId     String
+  indicatorId  String?
+  businessFee  Float // porcentagem do escritório
+  lawyerFee    Float // porcentagem do advogado
+  indicatorFee Float? // porcentagem de indicação
+  status       CaseStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+
+  payments Payment[]
+
+  client   Client @relation(fields: [clientId], references: [document])
+  clientId String
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String // Empresa responsável pelo processo
+
+  @@map("cases")
+}
+
+enum CaseStatus {
+  PENDING
+  OPEN
+  CLOSED
+}
+
+model Payment {
+  id      String        @id @default(cuid())
+  caseId  String
+  amount  Float
+  dueDate DateTime
+  paidAt  DateTime?
+  status  PaymentStatus @default(PENDING)
+
+  case                  Case                   @relation(fields: [caseId], references: [id])
+  splits                PaymentSplit[]
+  financialTransactions FinancialTransaction[]
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  LATE
+}
+
+model PaymentSplit {
+  id        String    @id @default(cuid())
+  paymentId String
+  type      SplitType // ESCRITORIO, ADVOGADO, INDICADOR
+  amount    Float
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+}
+
+enum SplitType {
+  OFFICE
+  LAWYER
+  INDICATOR
+}
+
+model FinancialTransaction {
+  id          String            @id @default(cuid())
+  categoryId  String
+  type        TransactionType // INCOME ou EXPENSE
+  amount      Float
+  description String?
+  date        DateTime          @default(now())
+  origin      TransactionOrigin // PAYMENT, MANUAL
+  paymentId   String?
+
+  category FinancialCategory @relation(fields: [categoryId], references: [id])
+  payment  Payment?          @relation(fields: [paymentId], references: [id])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionOrigin {
+  PAYMENT
+  MANUAL
 }

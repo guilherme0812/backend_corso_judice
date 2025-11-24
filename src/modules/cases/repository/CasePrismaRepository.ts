@@ -1,3 +1,4 @@
+import { CaseStatus } from "../../../../generated/prisma/enums";
 import { prismaClient } from "../../../prisma/prismaClient";
 import {
   CaseDataType,
@@ -5,7 +6,6 @@ import {
   FindAllParameters,
   ICaseRepository,
 } from "./ICaseRepository";
-import { CaseStatus } from "@prisma/client";
 
 export class CasePrismaRepository implements ICaseRepository {
   async findAll(params?: FindAllParameters): Promise<CaseDataType[]> {

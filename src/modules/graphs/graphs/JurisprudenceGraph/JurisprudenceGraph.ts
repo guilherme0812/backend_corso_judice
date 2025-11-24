@@ -10,7 +10,7 @@ import { jurisprudenceDefaults } from './metadata/defaults';
 const ConvertedJsonSchema = z.record(z.any());
 
 export type JurisprudenceDataType = {
-    message: string
+    message: string;
 };
 export class JurisprudenceAgent extends BaseGraph {
     constructor() {
@@ -41,8 +41,10 @@ export class JurisprudenceAgent extends BaseGraph {
     DEFAULTS = jurisprudenceDefaults;
 
     public model = new ChatGroq({
-        apiKey: process.env.GROQ_API_KEY!,
-        model: 'llama-3.3-70b-versatile',
+        // apiKey: process.env.GROQ_API_KEY!,
+        // model: 'llama-3.3-70b-versatile',
+        apiKey: process.env.OPENAI_API_KEY!,
+        model: 'gpt-oss-20b',
     });
 
     public async initializeGraph() {
@@ -70,6 +72,8 @@ export class JurisprudenceAgent extends BaseGraph {
     }
 
     async invokeGraph(data: JurisprudenceDataType) {
+        console.log(process.env.OPENAI_API_KEY);
+
         this.jurisprudenceData = data;
         const graphAgent = await this.buildGraphAgent();
 

@@ -1,3 +1,4 @@
 # Corso Judice - backend
 
-teste
+## inizialize prisma ORM
+npx prisma init --datasource-provider postgresql --output ../generated/prisma
