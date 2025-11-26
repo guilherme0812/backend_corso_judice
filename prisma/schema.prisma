@@ -232,7 +232,7 @@ enum CaseStatus {
 }
 
 model Payment {
-  id      String        @id @default(cuid())
+  id      String        @id @default(uuid())
   caseId  String
   amount  Float
   dueDate DateTime
