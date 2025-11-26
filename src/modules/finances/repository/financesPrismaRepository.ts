@@ -1,7 +1,7 @@
 import { prismaClient } from '../../../prisma/prismaClient';
 import { CreatePayment } from './IFinancesRepository';
 
-export class financesPrismaRepository {
+export class FinancesPrismaRepository {
     createPayment(data: CreatePayment) {
         return prismaClient.payment.create({ data });
     }
