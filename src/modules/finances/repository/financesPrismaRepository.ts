@@ -54,13 +54,16 @@ export class FinancesPrismaRepository {
 
     monthlyReport() {
         return prismaClient.$queryRaw`
-      SELECT 
-        DATE_FORMAT(date, '%Y-%m') as month,
-        SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END) as income,
-        SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) as expense
-      FROM FinancialTransaction
-      GROUP BY month
-      ORDER BY month DESC;
+        SELECT
+            TO_CHAR(date, 'YYYY-MM') AS month, 
+            SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END) AS income,
+            SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) AS expense
+        FROM 
+            "FinancialTransaction" ft 
+        GROUP BY 
+            month
+        ORDER BY 
+            month DESC
     `;
     }
 }
