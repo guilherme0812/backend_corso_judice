@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { FinancesService } from './financesService';
 import { FinancesPrismaRepository } from './repository/financesPrismaRepository';
+import { createPaymentSchema } from './finances.schema';
 
 export class FinancesController {
     constructor() {
@@ -10,10 +11,18 @@ export class FinancesController {
     financesServices: FinancesService;
     financesRepository: FinancesPrismaRepository;
 
-
     async createPayment(request: FastifyRequest, reply: FastifyReply) {
         try {
             if (request.body) {
+                const validate = createPaymentSchema.safeParse(request.body);
+                
+                if (!validate.success) {
+                    return reply.status(400).send({
+                        message: 'Validation error',
+                        errors: validate.error.errors,
+                    });
+                }
+
                 const body = {
                     ...request.body,
                 };
@@ -38,7 +47,6 @@ export class FinancesController {
         }
     }
 
-
     async getCashFlow(request: FastifyRequest, reply: FastifyReply) {
         try {
             const result = await this.financesServices.getCashFlow();
@@ -49,7 +57,7 @@ export class FinancesController {
             });
         }
     }
-   
+
     async monthlyReport(request: FastifyRequest, reply: FastifyReply) {
         try {
             const result = await this.financesServices.monthlyReport();
