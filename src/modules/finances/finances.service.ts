@@ -1,3 +1,5 @@
+import { GetCashFlowDTO, GetMonthlyReportDTO, GetPaymentsDTO } from "./finances.schema";
+
 export class FinancesService {
     constructor(private readonly financesRepository: any) {}
 
@@ -42,11 +44,15 @@ export class FinancesService {
         return { message: 'Pagamento realizado com sucesso' };
     }
 
-    async getCashFlow() {
-        return this.financesRepository.getCashFlow();
+    async getCashFlow(params: GetCashFlowDTO) {
+        return this.financesRepository.getCashFlow(params);
     }
 
-    async monthlyReport() {
-        return this.financesRepository.monthlyReport();
+    async monthlyReport(params: GetMonthlyReportDTO) {
+        return this.financesRepository.monthlyReport(params);
+    }
+
+    async getPayments(params: GetPaymentsDTO) {
+        return this.financesRepository.getPayments(params);
     }
 }

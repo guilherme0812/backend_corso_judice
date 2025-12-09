@@ -1,4 +1,5 @@
 import { prismaClient } from '../../../prisma/prismaClient';
+import { GetCashFlowDTO, GetMonthlyReportDTO, GetPaymentsDTO } from '../finances.schema';
 import { CreatePayment } from './IFinancesRepository';
 
 export class FinancesPrismaRepository {
@@ -9,6 +10,38 @@ export class FinancesPrismaRepository {
     getPayment(id: string) {
         return prismaClient.payment.findUnique({
             where: { id },
+            include: { case: true },
+        });
+    }
+
+    getPayments(params: GetPaymentsDTO) {
+        const whereClause: any = {};
+
+        if (params.companyId) {
+            whereClause.case = {
+                companyId: params.companyId,
+            };
+        }
+
+        if (params.caseId) {
+            whereClause.caseId = params.caseId;
+        }
+
+        if (params.status) {
+            whereClause.status = params.status;
+        }
+
+        if (params.dueDate) {
+            // whereClause.dueDate = { lte: new Date(params.dueDate) };
+            whereClause.dueDate = new Date(params.dueDate);
+        }
+
+        if (params.paidAt) {
+            whereClause.paidAt = { gte: new Date(params.paidAt) };
+        }
+
+        return prismaClient.payment.findMany({
+            where: whereClause,
             include: { case: true },
         });
     }
@@ -46,24 +79,49 @@ export class FinancesPrismaRepository {
         );
     }
 
-    getCashFlow() {
+    getCashFlow(params: GetCashFlowDTO) {
+        const whereClause: any = {};
+
+        if (params.companyId) {
+            whereClause.payment = {
+                case: {
+                    companyId: params.companyId,
+                },
+            };
+        }
+
+        if (params.startDate) {
+            whereClause.date = { gte: new Date(params.startDate) };
+        }
+        if (params.endDate) {
+            whereClause.date = {
+                ...whereClause.date,
+                lte: new Date(params.endDate),
+            };
+        }
+
         return prismaClient.financialTransaction.findMany({
+            where: whereClause,
             orderBy: { date: 'desc' },
         });
     }
 
-    monthlyReport() {
+    monthlyReport({ companyId }: GetMonthlyReportDTO) {
         return prismaClient.$queryRaw`
-        SELECT
-            TO_CHAR(date, 'YYYY-MM') AS month, 
-            SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END) AS income,
-            SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) AS expense
-        FROM 
-            "FinancialTransaction" ft 
-        GROUP BY 
-            month
-        ORDER BY 
-            month DESC
-    `;
+            SELECT
+                TO_CHAR(ft.date, 'YYYY-MM') AS month,
+                SUM(CASE WHEN ft.type = 'INCOME' THEN ft.amount ELSE 0 END) AS income,
+                SUM(CASE WHEN ft.type = 'EXPENSE' THEN ft.amount ELSE 0 END) AS expense
+            FROM 
+                "FinancialTransaction" ft
+            LEFT JOIN "Payment" p ON p.id = ft."paymentId"
+            LEFT JOIN "cases" c ON c.id = p."caseId"
+            WHERE 
+                c."companyId" = ${companyId}
+            GROUP BY 
+                month
+            ORDER BY 
+                month DESC
+        `;
     }
 }

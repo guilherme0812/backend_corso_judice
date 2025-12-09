@@ -1,4 +1,4 @@
-import { $Enums } from "@prisma/client";
+import { $Enums } from '@prisma/client';
 
 export type CreatePayment = {
     id: string;
@@ -7,4 +7,11 @@ export type CreatePayment = {
     paidAt: Date | null;
     status: $Enums.PaymentStatus;
     caseId: string;
-}
+};
+
+export type PaymentGenericParams = {
+    caseId?: string;
+    status?: $Enums.PaymentStatus;
+    dueDate?: string;
+    paidAt?: string;
+};
