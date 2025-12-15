@@ -15,6 +15,8 @@ import { attorneysRoutes } from './modules/Attorneys/attorneys.route';
 import { graphsRoutes } from './modules/graphs/graphs.route';
 import { customDocumentMappingRoutes } from './modules/CustomDocumentMapping/customDocumentMapping.route';
 import { financesRoutes } from "./modules/finances/finances.route";
+import { financialEntryRoutes } from "./modules/financial/entry/entrey.route";
+import { paymentRoutes } from "./modules/financial/payment/payment.routes";
 
 dotenv.config();
 
@@ -45,7 +47,9 @@ const start = async () => {
     app.register(attorneysRoutes, { prefix: '/api' });
     app.register(graphsRoutes, { prefix: '/api' });
     app.register(customDocumentMappingRoutes, { prefix: '/api' });
-    app.register(financesRoutes, { prefix: '/api' });
+    // app.register(financesRoutes, { prefix: '/api' });
+    app.register(financialEntryRoutes, { prefix: '/api' });
+    app.register(paymentRoutes, { prefix: '/api' });
 
     try {
         await app.listen({

@@ -18,8 +18,11 @@ export const getPaymentsSchema = z.object({
     caseId: z.string().optional(),
     status: z.enum(['PENDING', 'PAID', 'LATE']).optional(),
     dueDate: z.string().optional(),
+    startDueDate: z.string().optional(),
+    endDueDate: z.string().optional(),
     paidAt: z.string().optional(),
     companyId: z.string().optional(),
+
 });
 export type GetPaymentsDTO = z.infer<typeof getPaymentsSchema>;
 

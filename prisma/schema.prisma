@@ -84,6 +84,7 @@ model Company {
   Attorney              Attorney[]
   Graph                 Graph[]
   CustomDocumentMapping CustomDocumentMapping?
+  financialEntries      FinancialEntry[]
 
   @@map("companies")
 }
@@ -116,7 +117,7 @@ model Client {
   company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?
 
-  Case      Case[]
+  Case Case[]
 
   @@map("clients")
 }
@@ -187,42 +188,13 @@ model CustomDocumentMapping {
   @@map("custom_document_mapping")
 }
 
-// financial
-model FinancialCategory {
-  id        String       @id @default(uuid())
-  name      String
-  type      CategoryType // RECEITA ou DESPESA
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
-  transactions FinancialTransaction[]
-}
+// -----------------------------------------------------
+// ENUMS
+// -----------------------------------------------------
 
 enum CategoryType {
   INCOME
   EXPENSE
-}
-
-model Case {
-  id           String     @id @default(cuid())
-  title        String
-  lawyerId     String
-  indicatorId  String?
-  businessFee  Float // porcentagem do escritório
-  lawyerFee    Float // porcentagem do advogado
-  indicatorFee Float? // porcentagem de indicação
-  status       CaseStatus @default(PENDING)
-  createdAt    DateTime   @default(now())
-
-  payments Payment[]
-
-  client   Client @relation(fields: [clientId], references: [document])
-  clientId String
-
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId String // Empresa responsável pelo processo
-
-  @@map("cases")
 }
 
 enum CaseStatus {
@@ -231,32 +203,10 @@ enum CaseStatus {
   CLOSED
 }
 
-model Payment {
-  id      String        @id @default(uuid())
-  caseId  String
-  amount  Float
-  dueDate DateTime
-  paidAt  DateTime?
-  status  PaymentStatus @default(PENDING)
-
-  case                  Case                   @relation(fields: [caseId], references: [id])
-  splits                PaymentSplit[]
-  financialTransactions FinancialTransaction[]
-}
-
 enum PaymentStatus {
   PENDING
   PAID
   LATE
-}
-
-model PaymentSplit {
-  id        String    @id @default(cuid())
-  paymentId String
-  type      SplitType // ESCRITORIO, ADVOGADO, INDICADOR
-  amount    Float
-
-  payment Payment @relation(fields: [paymentId], references: [id])
 }
 
 enum SplitType {
@@ -265,26 +215,159 @@ enum SplitType {
   INDICATOR
 }
 
-model FinancialTransaction {
-  id          String            @id @default(cuid())
-  categoryId  String
-  type        TransactionType // INCOME ou EXPENSE
+enum EntryType {
+  RECEIVABLE
+  PAYABLE
+}
+
+enum EntryStatus {
+  PENDING
+  PAID
+  PARTIAL
+  OVERDUE
+}
+
+enum EntryOrigin {
+  PAYMENT // título criado devido ao Payment
+  SPLIT // título criado devido ao split
+  MANUAL // despesa manual/aluguel/etc
+  CASE // opcional para receitas geradas diretamente pelo caso
+}
+
+enum TransactionMethod {
+  PIX
+  BOLETO
+  TRANSFER
+  CASH
+  CREDIT_CARD
+  OTHER
+}
+
+// -----------------------------------------------------
+// MODELS PRINCIPAIS
+// -----------------------------------------------------
+
+// Plano de contas / categorias financeiras
+model FinancialCategory {
+  id        String       @id @default(uuid())
+  name      String
+  type      CategoryType
+  parentId  String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  parent   FinancialCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children FinancialCategory[] @relation("CategoryHierarchy")
+
+  entries FinancialEntry[]
+
+  @@map("financial_categories")
+}
+
+// Casos jurídicos
+model Case {
+  id            String     @id @default(cuid())
+  processNumber String?    @unique @db.VarChar(255)
+  title         String
+  lawyerId      String
+  indicatorId   String?
+  businessFee   Float // %
+  lawyerFee     Float // %
+  indicatorFee  Float?
+  status        CaseStatus @default(PENDING)
+  createdAt     DateTime   @default(now())
+
+  payments         Payment[]
+  financialEntries FinancialEntry[]
+
+  client   Client @relation(fields: [clientId], references: [document])
+  clientId String
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
+
+  @@map("cases")
+}
+
+// Pagamentos que o cliente deve fazer
+model Payment {
+  id      String        @id @default(uuid())
+  caseId  String
+  amount  Float
+  dueDate DateTime
+  paidAt  DateTime?
+  status  PaymentStatus @default(PENDING)
+
+  case    Case             @relation(fields: [caseId], references: [id])
+  splits  PaymentSplit[]
+  entries FinancialEntry[]
+
+  @@map("payments")
+}
+
+// Divisão do pagamento
+model PaymentSplit {
+  id        String    @id @default(uuid())
+  paymentId String
+  type      SplitType
+  amount    Float
+
+  payment Payment         @relation(fields: [paymentId], references: [id])
+  entry   FinancialEntry?
+
+  @@map("payment_splits")
+}
+
+// -----------------------------------------------------
+// FINANCEIRO
+// -----------------------------------------------------
+
+// Títulos financeiros (contas a pagar e a receber)
+model FinancialEntry {
+  id     String      @id @default(uuid())
+  type   EntryType
+  origin EntryOrigin
+  status EntryStatus @default(PENDING)
+
   amount      Float
+  dueDate     DateTime
+  paidAt      DateTime?
   description String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category   FinancialCategory @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  case   Case?   @relation(fields: [caseId], references: [id])
+  caseId String?
+
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+  paymentId String?
+
+  split   PaymentSplit? @relation(fields: [splitId], references: [id])
+  splitId String?       @unique
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
+
+  transactions FinancialTransaction[]
+
+  @@map("financial_entries")
+}
+
+// Movimentações: baixas de títulos (podem ser parciais)
+model FinancialTransaction {
+  id          String            @id @default(uuid())
+  entryId     String
+  amount      Float
   date        DateTime          @default(now())
-  origin      TransactionOrigin // PAYMENT, MANUAL
-  paymentId   String?
+  method      TransactionMethod
+  description String?
 
-  category FinancialCategory @relation(fields: [categoryId], references: [id])
-  payment  Payment?          @relation(fields: [paymentId], references: [id])
-}
+  entry FinancialEntry @relation(fields: [entryId], references: [id])
 
-enum TransactionType {
-  INCOME
-  EXPENSE
-}
-
-enum TransactionOrigin {
-  PAYMENT
-  MANUAL
+  @@map("financial_transactions")
 }

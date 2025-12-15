@@ -31,6 +31,17 @@ export class FinancesPrismaRepository {
             whereClause.status = params.status;
         }
 
+        if (params.startDueDate) {
+            whereClause.dueDate = { gte: new Date(params.startDueDate) };
+        }
+
+        if (params.endDueDate) {
+            whereClause.dueDate = {
+                ...whereClause.dueDate,
+                lte: new Date(params.endDueDate),
+            };
+        }
+
         if (params.dueDate) {
             // whereClause.dueDate = { lte: new Date(params.dueDate) };
             whereClause.dueDate = new Date(params.dueDate);

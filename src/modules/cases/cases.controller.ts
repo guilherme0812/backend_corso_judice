@@ -3,6 +3,7 @@ import { CaseService } from './cases.service';
 import { CasePrismaRepository } from './repository/CasePrismaRepository';
 import { createResponse } from '../../utils/responseHelper';
 import { CaseDataType, CreateCase } from './repository/ICaseRepository';
+import { UserDataType } from '../users/repository/IUserRepository';
 
 const caseRepository = new CasePrismaRepository();
 const caseService = new CaseService(caseRepository);
@@ -40,10 +41,23 @@ export class CasesController {
         }
     }
 
-    async create(request: FastifyRequest, reply: FastifyReply) {
+    async create(
+        request: FastifyRequest & {
+            user: UserDataType;
+        },
+        reply: FastifyReply,
+    ) {
         try {
-            await caseService.create(request.body as CreateCase);
-            reply.status(200).send(createResponse('Case created'));
+            if (request.body) {
+                const body = {
+                    ...request?.body,
+                    companyId: (request as any).user?.companyId,
+                };
+                await caseService.create(body as CreateCase);
+                reply.status(200).send(createResponse('Case created'));
+            } else {
+                reply.status(400).send({ message: 'body is required' });
+            }
         } catch (error: any) {
             reply.status(error.status || 400).send({ message: error.message });
         }
@@ -51,7 +65,7 @@ export class CasesController {
 
     async update(request: CustomFastifyQueryParam, reply: FastifyReply) {
         try {
-            const id = request.query.id;
+            const id = (request as any)?.body.id;
 
             if (!id) {
                 throw createResponse('Id is required');
