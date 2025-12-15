@@ -1,6 +1,32 @@
 import { prismaClient } from '../../../prisma/prismaClient';
+import { GetAllParamsDTO } from './payment.schema';
 
 export class PaymentRepository {
+    findAll({ caseId, companyId, endDueDate, startDueDate, status }: GetAllParamsDTO) {
+        const whereClause: any = {};
+
+        if (caseId) {
+            whereClause.caseId = caseId;
+        }
+        if (companyId) {
+            whereClause.case = { companyId };
+        }
+        if (startDueDate) {
+            whereClause.dueDate = { gte: new Date(startDueDate) };
+        }
+        if (endDueDate) {
+            whereClause.dueDate = { ...whereClause.dueDate, lte: new Date(endDueDate) };
+        }
+        if (status) {
+            whereClause.status = status;
+        }
+
+        return prismaClient.payment.findMany({
+            where: { ...whereClause},
+            include: { splits: true },
+        });
+    }
+
     create(data: any) {
         return prismaClient.payment.create({
             data,

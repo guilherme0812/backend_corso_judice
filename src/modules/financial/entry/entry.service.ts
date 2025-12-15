@@ -54,8 +54,8 @@ export class FinancialEntryService {
         return paymentEntry;
     }
 
-    async listByCompany(companyId: string) {
-        return this.repo.listByCompany(companyId);
+    async list(params: GetSummaryDTO) {
+        return this.repo.list(params);
     }
 
     async getAggregatedByMonth(startDate: any, endDate: string, companyId: string) {

@@ -7,3 +7,13 @@ export const createPaymentSchema = z.object({
         message: 'Invalid date format',
     }),
 });
+
+export const getAllSchema = z.object({
+    status: z.enum(['PENDING', 'PAID']).optional(),
+    companyId: z.string().optional(),
+    startDueDate: z.string().optional(),
+    endDueDate: z.string().optional(),
+    caseId: z.string().optional(),
+});
+
+export type GetAllParamsDTO = z.infer<typeof getAllSchema>;

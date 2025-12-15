@@ -1,6 +1,6 @@
 import { EntryStatus } from '@prisma/client';
 import { prismaClient } from '../../../prisma/prismaClient';
-import { GetSummaryDTO } from './entry.schema';
+import { GetListDTO, GetSummaryDTO } from './entry.schema';
 
 export class FinancialEntryRepository {
     async create(data: any) {
@@ -18,9 +18,19 @@ export class FinancialEntryRepository {
         });
     }
 
-    async listByCompany(companyId: string) {
+    async list({ companyId, startDate, endDate, limit }: GetListDTO) {
+        const whereClause: any = {};
+
+        if (companyId) {
+            whereClause.companyId = companyId;
+        }
+        if (startDate) whereClause.gte = new Date(startDate);
+        if (endDate) whereClause.lte = new Date(endDate);
+       
+
         return prismaClient.financialEntry.findMany({
-            where: { case: { companyId } },
+            where: { ...whereClause },
+            take: limit || undefined,
             select: {
                 id: true,
                 type: true,

@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { FinancialEntryService } from './entry.service';
 import { UserDataType } from '../../users/repository/IUserRepository';
-import { cashFlowSchema, GetSummaryDTO, getSummarySchema, payPaymentSchema } from './entry.schema';
+import { cashFlowSchema, GetListDTO, getListSchema, GetSummaryDTO, getSummarySchema, payPaymentSchema } from './entry.schema';
 
 export class FinancialEntryController {
     private service = new FinancialEntryService();
@@ -12,8 +12,21 @@ export class FinancialEntryController {
         },
         reply: FastifyReply,
     ) {
+        const query = req.query as { startDate?: string; endDate?: string; limit?: string };
         const companyId = req.user.companyId as string;
-        const entries = await this.service.listByCompany(companyId);
+
+        const params: GetListDTO = {
+            startDate: query.startDate,
+            endDate: query.endDate,
+            companyId,
+            limit: query.limit ? Number(query.limit) : undefined,
+        };
+        const validationSchema = getListSchema.safeParse(params);
+        if (!validationSchema.success) {
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+        }
+
+        const entries = await this.service.list(params);
         reply.send(entries);
     }
 

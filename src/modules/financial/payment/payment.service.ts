@@ -2,6 +2,7 @@ import { CaseService } from '../../cases/cases.service';
 import { CasePrismaRepository } from '../../cases/repository/CasePrismaRepository';
 import { FinancialEntryService } from '../entry/entry.service';
 import { PaymentSplitService } from '../paymentSplit/split.service';
+import { GetAllParamsDTO } from './payment.schema';
 import { PaymentRepository } from './paymentRepository';
 
 export class PaymentService {
@@ -17,10 +18,14 @@ export class PaymentService {
         this.caseService = new CaseService(new CasePrismaRepository());
     }
 
+    async getAll(params: GetAllParamsDTO) {
+        return this.repository.findAll(params);
+    }
+    
     async createPayment(data: any) {
         const payment = await this.repository.create(data);
         const caseObj = await this.caseService.findOne(data.caseId);
-        
+
         await this.paymentSplitService.generateSplitsForPayment(caseObj, payment);
 
         await this.financialEntryService.createReceivableFromPayment(payment, caseObj);
