@@ -14,7 +14,6 @@ import { documentsRoutes } from './modules/documents/document.route';
 import { attorneysRoutes } from './modules/Attorneys/attorneys.route';
 import { graphsRoutes } from './modules/graphs/graphs.route';
 import { customDocumentMappingRoutes } from './modules/CustomDocumentMapping/customDocumentMapping.route';
-import { financesRoutes } from './modules/finances/finances.route';
 import { financialEntryRoutes } from './modules/financial/entry/entrey.route';
 import { paymentRoutes } from './modules/financial/payment/payment.routes';
 import { financialCategoryRoutes } from './modules/financial/category/category.route';

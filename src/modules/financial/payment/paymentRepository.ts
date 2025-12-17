@@ -41,6 +41,14 @@ export class PaymentRepository {
                         },
                     },
                 },
+                entries: {
+                    select: {
+                        id: true,
+                        type: true,
+                        status: true,
+                        amount: true,
+                    },
+                },
             },
         });
     }

@@ -21,9 +21,14 @@ export class PaymentService {
     async getAll(params: GetAllParamsDTO) {
         return this.repository.findAll(params);
     }
-    
+
     async createPayment(data: any) {
-        const payment = await this.repository.create(data);
+        const body = {
+            ...data,
+            dueDate: new Date(data.dueDate).toISOString(),
+        };
+        console.log('body', body);
+        const payment = await this.repository.create(body);
         const caseObj = await this.caseService.findOne(data.caseId);
 
         await this.paymentSplitService.generateSplitsForPayment(caseObj, payment);
