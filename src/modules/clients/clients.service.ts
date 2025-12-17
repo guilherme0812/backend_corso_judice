@@ -40,8 +40,6 @@ export class ClientService {
             throw createResponse('Não foi possível registrar esse clinte', 400);
         }
 
-        console.log('Creating client for:', { ...body });
-
         return this.clientRepository.create({
             ...body,
             company: { connect: { id: companyId } },

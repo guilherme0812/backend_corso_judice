@@ -41,10 +41,11 @@ export class JurisprudenceAgent extends BaseGraph {
     DEFAULTS = jurisprudenceDefaults;
 
     public model = new ChatGroq({
-        // apiKey: process.env.GROQ_API_KEY!,
-        // model: 'llama-3.3-70b-versatile',
-        apiKey: process.env.OPENAI_API_KEY!,
-        model: 'gpt-oss-20b',
+        apiKey: process.env.GROQ_API_KEY!,
+        model: 'llama-3.3-70b-versatile',
+        temperature: 0.3
+        // apiKey: process.env.OPENAI_API_KEY!,
+        // model: 'gpt-oss-20b',
     });
 
     public async initializeGraph() {

@@ -9,7 +9,7 @@ export const createPaymentSchema = z.object({
 });
 
 export const getAllSchema = z.object({
-    status: z.enum(['PENDING', 'PAID']).optional(),
+    status: z.enum(['PENDING', 'PAID', 'LATE']).optional(),
     companyId: z.string().optional(),
     startDueDate: z.string().optional(),
     endDueDate: z.string().optional(),

@@ -14,7 +14,7 @@ export class FinancialEntryService {
             amount: payment.amount,
             dueDate: payment.dueDate,
             paymentId: payment.id,
-            categoryId: payment.categoryId || '8c631347-9f3b-4648-b8c8-3c4c433f706b', // ou uma categoria padrão "Receitas"
+            categoryId: payment.categoryId ,
             caseId: payment.caseId,
         });
 
@@ -22,7 +22,6 @@ export class FinancialEntryService {
     }
 
     async createPayablesFromSplit(payment: any, splits: any[], companyId: string) {
-        console.log('Creating payables from splits:', { payment, splits, companyId });
         const promises = splits.map((split) =>
             this.repo.create({
                 companyId: companyId,
@@ -33,7 +32,7 @@ export class FinancialEntryService {
                 paidAt: payment.paidAt ?? new Date(),
                 paymentId: payment.id,
                 splitId: split.id,
-                categoryId: payment.categoryId || '8c631347-9f3b-4648-b8c8-3c4c433f706b', // Categoria de despesas vinculada ao split
+                categoryId: payment.categoryId, 
                 caseId: payment.caseId,
             }),
         );

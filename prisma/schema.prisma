@@ -73,10 +73,11 @@ model Company {
   foundedAt          DateTime?
   documentStorageUrl String?
 
-  users     User[]
-  clients   Client[]
-  documents Document[]
-  Case      Case[]
+  users           User[]
+  clients         Client[]
+  documents       Document[]
+  Case            Case[]
+  financialCatery FinancialCategory[]
 
   lastLoginAt           DateTime?
   createAt              DateTime               @default(now())
@@ -261,6 +262,9 @@ model FinancialCategory {
 
   entries FinancialEntry[]
 
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?  @db.VarChar(255)
+
   @@map("financial_categories")
 }
 
@@ -281,10 +285,10 @@ model Case {
   financialEntries FinancialEntry[]
 
   client   Client @relation(fields: [clientId], references: [document])
-  clientId String
+  clientId String @db.VarChar(255)
 
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId String
+  companyId String  @db.VarChar(255)
 
   @@map("cases")
 }
@@ -338,17 +342,17 @@ model FinancialEntry {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  category   FinancialCategory @relation(fields: [categoryId], references: [id])
-  categoryId String
+  category   FinancialCategory? @relation(fields: [categoryId], references: [id])
+  categoryId String?            @db.VarChar(255)
 
   case   Case?   @relation(fields: [caseId], references: [id])
-  caseId String?
+  caseId String? @db.VarChar(255)
 
   payment   Payment? @relation(fields: [paymentId], references: [id])
-  paymentId String?
+  paymentId String?  @db.VarChar(255)
 
   split   PaymentSplit? @relation(fields: [splitId], references: [id])
-  splitId String?       @unique
+  splitId String?       @unique @db.VarChar(255)
 
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String

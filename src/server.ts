@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 import Fastify from 'fastify';
 import { companiesRoutes } from './modules/companies/companies.routes';
 import { cors } from './plugins/cors';
@@ -14,16 +14,16 @@ import { documentsRoutes } from './modules/documents/document.route';
 import { attorneysRoutes } from './modules/Attorneys/attorneys.route';
 import { graphsRoutes } from './modules/graphs/graphs.route';
 import { customDocumentMappingRoutes } from './modules/CustomDocumentMapping/customDocumentMapping.route';
-import { financesRoutes } from "./modules/finances/finances.route";
-import { financialEntryRoutes } from "./modules/financial/entry/entrey.route";
-import { paymentRoutes } from "./modules/financial/payment/payment.routes";
+import { financesRoutes } from './modules/finances/finances.route';
+import { financialEntryRoutes } from './modules/financial/entry/entrey.route';
+import { paymentRoutes } from './modules/financial/payment/payment.routes';
+import { financialCategoryRoutes } from './modules/financial/category/category.route';
 
 dotenv.config();
 
 const app = Fastify();
 
 const start = async () => {
-
     // Plugins
     await app.register(prismaPlugin);
 
@@ -50,6 +50,7 @@ const start = async () => {
     // app.register(financesRoutes, { prefix: '/api' });
     app.register(financialEntryRoutes, { prefix: '/api' });
     app.register(paymentRoutes, { prefix: '/api' });
+    app.register(financialCategoryRoutes, { prefix: '/api' });
 
     try {
         await app.listen({

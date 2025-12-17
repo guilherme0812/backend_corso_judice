@@ -22,8 +22,26 @@ export class PaymentRepository {
         }
 
         return prismaClient.payment.findMany({
-            where: { ...whereClause},
-            include: { splits: true },
+            where: { ...whereClause },
+            include: {
+                splits: true,
+                case: {
+                    select: {
+                        title: true,
+                        processNumber: true,
+                        lawyerFee: true,
+                        businessFee: true,
+                        indicatorFee: true,
+                        indicatorId: true,
+                        client: {
+                            select: {
+                                firstName: true,
+                                lastName: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
     }
 
