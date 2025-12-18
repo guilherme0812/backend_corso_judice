@@ -27,7 +27,6 @@ export class PaymentService {
             ...data,
             dueDate: new Date(data.dueDate).toISOString(),
         };
-        console.log('body', body);
         const payment = await this.repository.create(body);
         const caseObj = await this.caseService.findOne(data.caseId);
 
