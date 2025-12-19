@@ -18,7 +18,7 @@ export async function seedUsers() {
             hasWhatsapp: true,
             profilePicture: null,
             status: "ACTIVE",
-            companyId: '80ab45b4-a5b5-4633-9e77-bbf46cf91278',
+            // companyId: '80ab45b4-a5b5-4633-9e77-bbf46cf91278',
         },
     ];
 
