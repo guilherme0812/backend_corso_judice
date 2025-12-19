@@ -98,5 +98,5 @@ export async function seedClients() {
         }
     }
 
-    console.log(`✅ Seeded ${list.length} attorneys`);
+    console.log(`✅ Seeded ${list.length} clients`);
 }

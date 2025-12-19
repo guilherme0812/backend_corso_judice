@@ -3,7 +3,6 @@ import { seedAttorneys } from './attorney';
 import { seedClients } from './client';
 import { seedCompanies } from './company';
 import { seedCustomDocumentMapping } from './customDocumentMapping';
-// import { seedFinancialCategories } from './financialCategory';
 import { seedUsers } from './user';
 
 async function runSeed() {

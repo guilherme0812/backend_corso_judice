@@ -18,7 +18,7 @@
         "docker:restart": "npm run docker:down && npm run docker:up",
         "docker:logs": "docker-compose logs -f",
         "docker:prune": "docker system prune -f --volumes",
-        "seed": "ts-node src/seeds/seed.ts"
+        "seed": "tsx src/seeds/seed.ts"
     },
     "author": "Guilherme Maffei",
     "license": "ISC",

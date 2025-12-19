@@ -17,7 +17,7 @@ export async function seedUsers() {
             phone: '5511999998888',
             hasWhatsapp: true,
             profilePicture: null,
-            isActive: true,
+            status: "ACTIVE",
             companyId: '80ab45b4-a5b5-4633-9e77-bbf46cf91278',
         },
     ];
