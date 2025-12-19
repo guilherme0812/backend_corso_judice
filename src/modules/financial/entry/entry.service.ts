@@ -1,10 +1,16 @@
 import { EntryOrigin, EntryStatus, EntryType } from '@prisma/client';
 import { FinancialEntryRepository } from './entryRepository';
 import { PaymentService } from '../payment/payment.service';
-import { GetSummaryDTO } from './entry.schema';
+import { createEntryPaymentDTO, GetSummaryDTO } from './entry.schema';
+import { PaymentSplitDataType, PaymentSplitType } from '../paymentSplit/split.schema';
 
 export class FinancialEntryService {
     private repo = new FinancialEntryRepository();
+
+    async createEntryPayment(body: createEntryPaymentDTO) {
+        const result = await this.repo.create(body);
+        return result;
+    }
 
     async createReceivableFromPayment(payment: any, caseObj: any) {
         const result = await this.repo.create({
@@ -14,28 +20,30 @@ export class FinancialEntryService {
             amount: payment.amount,
             dueDate: payment.dueDate,
             paymentId: payment.id,
-            categoryId: payment.categoryId ,
+            categoryId: payment.categoryId,
             caseId: payment.caseId,
         });
 
         return result;
     }
 
-    async createPayablesFromSplit(payment: any, splits: any[], companyId: string) {
-        const promises = splits.map((split) =>
-            this.repo.create({
-                companyId: companyId,
-                type: EntryType.PAYABLE,
-                origin: EntryOrigin.SPLIT,
-                amount: split.amount,
-                dueDate: payment.paidAt ?? new Date(),
-                paidAt: payment.paidAt ?? new Date(),
-                paymentId: payment.id,
-                splitId: split.id,
-                categoryId: payment.categoryId, 
-                caseId: payment.caseId,
-            }),
-        );
+    async createPayablesFromSplit(payment: any, splits: PaymentSplitDataType[], companyId: string) {
+        const promises = splits
+            .filter((item) => item.type != PaymentSplitType.OFFICE)
+            .map((split) =>
+                this.repo.create({
+                    companyId: companyId,
+                    type: EntryType.PAYABLE,
+                    origin: EntryOrigin.SPLIT,
+                    amount: split.amount,
+                    dueDate: payment.paidAt ?? new Date(),
+                    // paidAt: payment.paidAt ?? new Date(),
+                    paymentId: payment.id,
+                    splitId: split.id,
+                    categoryId: payment.categoryId,
+                    caseId: payment.caseId,
+                }),
+            );
 
         return Promise.all(promises);
     }
@@ -43,7 +51,7 @@ export class FinancialEntryService {
     async markAsPaid(entryId: string) {
         const paymentEntry = await this.repo.updateStatus(entryId, EntryStatus.PAID, new Date());
 
-        if (paymentEntry.paymentId) {
+        if (paymentEntry.paymentId && paymentEntry.type == 'RECEIVABLE') {
             const paymentService = new PaymentService();
             const payment = await paymentService.markPaymentAsPaid(paymentEntry.paymentId);
 

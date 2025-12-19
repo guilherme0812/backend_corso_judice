@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { CaseService } from './cases.service';
 import { CasePrismaRepository } from './repository/CasePrismaRepository';
 import { createResponse } from '../../utils/responseHelper';
-import { CaseDataType, CreateCase } from './repository/ICaseRepository';
+import { CaseDataType, CreateCase, FindAllParameters } from './repository/ICaseRepository';
 import { UserDataType } from '../users/repository/IUserRepository';
+import { getAllCasesSchema, GetCasesDTO } from './cases.schema';
 
 const caseRepository = new CasePrismaRepository();
 const caseService = new CaseService(caseRepository);
@@ -17,9 +18,23 @@ export type CustomFastifyQueryParam = FastifyRequest<{
 }>;
 
 export class CasesController {
-    async findAll(request: FastifyRequest, reply: FastifyReply) {
+    async findAll(
+        request: FastifyRequest<{ Querystring: GetCasesDTO }> & {
+            user: UserDataType;
+        },
+        reply: FastifyReply,
+    ) {
+        const params: GetCasesDTO = {
+            companyId: request.user?.companyId as string,
+            ...request.query
+        };
+
         try {
-            const cases = await caseService.findAll();
+            const validationSchema = getAllCasesSchema.safeParse(params);
+            if (!validationSchema.success) {
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            }
+            const cases = await caseService.findAll(params);
             reply.status(200).send(cases);
         } catch (error: any) {
             reply.status(error.status || 400).send({ message: error.message });

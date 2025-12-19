@@ -25,7 +25,7 @@ export class AttorneyPrismaRepository implements IAttorneyRepository {
     findOne(id: string): Promise<AttorneyDataType | null> {
         return prismaClient.attorney.findUnique({ where: { id } });
     }
-    create(body: CreateAttorney): Promise<AttorneyDataType> {
+    create({...body}: CreateAttorney): Promise<AttorneyDataType> {
         return prismaClient.attorney.create({ data: body });
     }
 

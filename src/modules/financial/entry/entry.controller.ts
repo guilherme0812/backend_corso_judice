@@ -1,7 +1,16 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { FinancialEntryService } from './entry.service';
 import { UserDataType } from '../../users/repository/IUserRepository';
-import { cashFlowSchema, GetListDTO, getListSchema, GetSummaryDTO, getSummarySchema, payPaymentSchema } from './entry.schema';
+import {
+    cashFlowSchema,
+    createEntryPaymentDTO,
+    createEntryPaymentSchema,
+    GetListDTO,
+    getListSchema,
+    GetSummaryDTO,
+    getSummarySchema,
+    payPaymentSchema,
+} from './entry.schema';
 
 export class FinancialEntryController {
     private service = new FinancialEntryService();
@@ -60,6 +69,29 @@ export class FinancialEntryController {
         reply.status(200).send(payment);
     }
 
+    async createEntryPayment(
+        req: FastifyRequest & {
+            user: UserDataType;
+        } & any,
+        reply: FastifyReply,
+    ) {
+        
+        const body: createEntryPaymentDTO = {
+            ...req.body,
+            dueDate: new Date(req.body.dueDate).toISOString(),
+            companyId: req.user.companyId,
+        };
+
+        const validationSchema = createEntryPaymentSchema.safeParse(body);
+        if (!validationSchema.success) {
+            return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error.errors });
+        }
+
+        const payment = await this.service.createEntryPayment(body);
+        reply.status(200).send(payment);
+    }
+
+    
     async getRealizedFlow(
         req: FastifyRequest & {
             user: UserDataType;

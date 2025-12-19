@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { AttorneyService } from './attorneys.service';
 import { AttorneyPrismaRepository } from './repository/AttorneyPrismaRepository';
 import { AttorneyDataType, CreateAttorney, GenericParams } from './repository/IAttorneyRepository';
+import { createAttorneySchema } from './attorney.schema';
 
 const attorneyRepository = new AttorneyPrismaRepository();
 const attorneyService = new AttorneyService(attorneyRepository);
@@ -40,7 +41,11 @@ export class AttorneyController {
                 companyId: (request as any).user?.companyId,
             };
 
-            console.log('body: ', body);
+            const validationSchema = createAttorneySchema.safeParse(body);
+            if (!validationSchema.success) {
+                return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error.errors });
+            }
+
             const data = await attorneyService.create(body as CreateAttorney);
             reply.status(201).send(data);
         } catch (error: any) {

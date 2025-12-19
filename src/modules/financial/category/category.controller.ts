@@ -29,7 +29,6 @@ export class FinancialCategoryController {
                 return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
             }
 
-            console.log('params', params);
             const entries = await this.service.findAll(params);
             reply.send(entries);
         } catch (error: any) {

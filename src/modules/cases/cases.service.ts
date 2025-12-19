@@ -1,3 +1,4 @@
+import { GetCasesDTO } from "./cases.schema";
 import {
   CaseDataType,
   CreateCase,
@@ -7,8 +8,8 @@ import {
 export class CaseService {
   constructor(private readonly caseRepository: ICaseRepository) {}
 
-  async findAll() {
-    return this.caseRepository.findAll();
+  async findAll(params?: GetCasesDTO) {
+    return this.caseRepository.findAll(params);
   }
 
   async findOne(id: string) {

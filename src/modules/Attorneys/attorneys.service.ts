@@ -19,11 +19,8 @@ export class AttorneyService {
         return this.attorneyRepository.findOne(id);
     }
 
-    async create({ companyId, ...body }: CreateAttorney) {
-        return this.attorneyRepository.create({
-            ...body,
-            company: { connect: { id: companyId } },
-        } as any);
+    async create(body: CreateAttorney) {
+        return this.attorneyRepository.create(body);
     }
 
     async update(body: AttorneyDataType) {
