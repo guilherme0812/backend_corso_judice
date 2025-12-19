@@ -32,7 +32,7 @@ export class CasesController {
         try {
             const validationSchema = getAllCasesSchema.safeParse(params);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
             }
             const cases = await caseService.findAll(params);
             reply.status(200).send(cases);

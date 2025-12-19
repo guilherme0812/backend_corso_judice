@@ -1,5 +1,5 @@
 import { BaseGraph } from '../BaseGraph';
-import { z } from 'zod';
+// import { z } from 'zod';
 import { ChatGroq } from '@langchain/groq';
 import { Annotation, StateGraph } from '@langchain/langgraph';
 import { NodeId } from './nodeIds';
@@ -7,7 +7,7 @@ import { jurisprudenceAgentFunction } from './agents/jusrisprudenceAgent';
 import { jurisprudenceDefaults } from './metadata/defaults';
 
 // Esquema Zod para validar o JSON final
-const ConvertedJsonSchema = z.record(z.any());
+// const ConvertedJsonSchema = z.record(z.any());
 
 export type JurisprudenceDataType = {
     message: string;

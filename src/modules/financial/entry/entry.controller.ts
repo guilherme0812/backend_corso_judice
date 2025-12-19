@@ -32,7 +32,7 @@ export class FinancialEntryController {
         };
         const validationSchema = getListSchema.safeParse(params);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const entries = await this.service.list(params);
@@ -62,7 +62,7 @@ export class FinancialEntryController {
 
         const validationSchema = payPaymentSchema.safeParse(params);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const payment = await this.service.markAsPaid(params.id);
@@ -84,7 +84,7 @@ export class FinancialEntryController {
 
         const validationSchema = createEntryPaymentSchema.safeParse(body);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error });
         }
 
         const payment = await this.service.createEntryPayment(body);
@@ -109,7 +109,7 @@ export class FinancialEntryController {
 
         const validationSchema = cashFlowSchema.safeParse(params);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const { startDate, endDate } = params;
@@ -135,7 +135,7 @@ export class FinancialEntryController {
 
         const validationSchema = cashFlowSchema.safeParse(params);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const { startDate, endDate } = params;
@@ -161,7 +161,7 @@ export class FinancialEntryController {
 
         const validationSchema = getSummarySchema.safeParse(params);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const data = await this.service.getSummary(params);

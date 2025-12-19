@@ -6,9 +6,6 @@ import { NodeId } from './nodeIds';
 import { getJsonConversionAgent } from './agents/JsonConversionAgent';
 import { jsonConversionDefaults } from './metadata/defaults';
 
-// Esquema Zod para validar o JSON final
-const ConvertedJsonSchema = z.record(z.any());
-
 export type JsonConversionDataType = {
     base_json?: Record<string, any>;
     mapping_json: Record<string, any>;

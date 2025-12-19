@@ -26,7 +26,7 @@ export class FinancialCategoryController {
             };
             const validationSchema = getAllCategorySchema.safeParse(params);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
             }
 
             const entries = await this.service.findAll(params);
@@ -52,7 +52,7 @@ export class FinancialCategoryController {
             };
             const validationSchema = getAllCategorySchema.safeParse(params);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
             }
 
             const category = await this.service.findOneOrThrow(params.id);
@@ -81,7 +81,7 @@ export class FinancialCategoryController {
 
             const validationSchema = createFinancialCategorySchema.safeParse(body);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
             }
 
             const payment = await this.service.create(req.body);
@@ -107,7 +107,7 @@ export class FinancialCategoryController {
             };
             const validationSchema = getAllCategorySchema.safeParse(params);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
             }
 
             const entries = await this.service.remove(params.id);

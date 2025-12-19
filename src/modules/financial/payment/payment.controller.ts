@@ -37,7 +37,7 @@ export class PaymentController {
 
         const validationSchema = getAllSchema.safeParse(query);
         if (!validationSchema.success) {
-            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error.errors });
+            return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
         }
 
         const payments = await this.service.getAll(params);

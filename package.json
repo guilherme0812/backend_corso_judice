@@ -12,7 +12,7 @@
         "prebuild": "npm install && npx prisma generate",
         "build": "tsc",
         "migrate": "prisma migrate deploy",
-        "start": "node dist/server.js",
+        "start": "node dist/src/server.js",
         "docker:up": "docker-compose up --build",
         "docker:down": "docker-compose down",
         "docker:restart": "npm run docker:down && npm run docker:up",
@@ -57,9 +57,15 @@
         "multer": "^2.0.2",
         "pg": "^8.16.3",
         "pizzip": "^3.2.0",
-        "zod": "^3.25.76",
-        "zod-to-json-schema": "^3.24.6"
+        "zod": "^4.2.1",
+        "zod-to-json-schema": "^3.25.0"
+    },
+    "resolutions": {
+        "zod": "^4.2.1"
+    },
+    "overrides": {
+        "zod": "^4.2.1"
     },
     "keywords": [],
-    "type": "module"
+    "type": "commonjs"
 }

@@ -6,7 +6,7 @@ import { Command } from '@langchain/langgraph';
 import { NodeId } from '../nodeIds';
 import { JsonOutputParser } from '@langchain/core/output_parsers';
 
-const jsonSchema = z.record(z.any());
+const jsonSchema = z.record(z.string(), z.any());
 const parser = new JsonOutputParser();
 
 export const jurisprudenceAgentFunction = (graph: JurisprudenceAgent) => {

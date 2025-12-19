@@ -43,7 +43,7 @@ export class AttorneyController {
 
             const validationSchema = createAttorneySchema.safeParse(body);
             if (!validationSchema.success) {
-                return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error.errors });
+                return reply.status(400).send({ error: 'Invalid body', details: validationSchema.error });
             }
 
             const data = await attorneyService.create(body as CreateAttorney);
