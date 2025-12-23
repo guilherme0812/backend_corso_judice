@@ -2,7 +2,7 @@ import { CaseService } from '../../cases/cases.service';
 import { CasePrismaRepository } from '../../cases/repository/CasePrismaRepository';
 import { FinancialEntryService } from '../entry/entry.service';
 import { PaymentSplitService } from '../paymentSplit/split.service';
-import { GetAllParamsDTO } from './payment.schema';
+import { GetAllParamsDTO, PaymentDataType } from './payment.schema';
 import { PaymentRepository } from './paymentRepository';
 
 export class PaymentService {
@@ -18,7 +18,7 @@ export class PaymentService {
         this.caseService = new CaseService(new CasePrismaRepository());
     }
 
-    async getAll(params: GetAllParamsDTO) {
+    async getAll(params: GetAllParamsDTO): Promise<PaymentDataType[]> {
         return this.repository.findAll(params);
     }
 
@@ -42,4 +42,12 @@ export class PaymentService {
 
         return payment;
     }
+    
+    async markPaymentAsLate(paymentId: string) {
+        const payment = await this.repository.markPaymentAsLate(paymentId);
+
+        return payment;
+    }
+
+
 }

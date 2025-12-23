@@ -47,6 +47,7 @@
         "@vercel/node": "^3.2.27",
         "angular-expressions": "^1.5.1",
         "bcryptjs": "^2.4.3",
+        "bree": "^9.2.6",
         "cors": "^2.8.5",
         "docxtemplater": "^3.66.7",
         "dotenv": "^16.6.1",

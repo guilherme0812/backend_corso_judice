@@ -18,15 +18,23 @@ export class FinancialEntryRepository {
         });
     }
 
-    async list({ companyId, startDate, endDate, limit }: GetListDTO) {
+    async list({ companyId, startDate, endDate, limit, startDueDate, endDueDate, status }: GetListDTO) {
         const whereClause: any = {};
 
         if (companyId) {
             whereClause.companyId = companyId;
         }
         if (startDate) whereClause.gte = new Date(startDate);
+
         if (endDate) whereClause.lte = new Date(endDate);
-       
+
+        if (startDueDate && endDueDate) {
+            whereClause.dueDate = { gte: new Date(startDueDate), lte: new Date(endDueDate) };
+        }
+
+        if (status) {
+            whereClause.status = status
+        }
 
         return prismaClient.financialEntry.findMany({
             where: { ...whereClause },
@@ -89,10 +97,10 @@ ORDER BY DATE_TRUNC('month', fe."paidAt") ASC;
         return entries;
     }
 
-    async getProjectedFlow(startDate: Date, endDate: Date) {
+    async getProjectedFlow(startDate: string, endDate: string) {
         const entries = await prismaClient.financialEntry.findMany({
             where: {
-                dueDate: { gte: startDate, lte: endDate },
+                dueDate: { gte: new Date(startDate), lte: new Date(endDate) },
                 status: { in: ['PENDING', 'OVERDUE'] },
             },
             include: {

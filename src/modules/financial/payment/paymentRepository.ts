@@ -1,3 +1,4 @@
+import { PaymentStatus } from '@prisma/client';
 import { prismaClient } from '../../../prisma/prismaClient';
 import { GetAllParamsDTO } from './payment.schema';
 
@@ -64,6 +65,16 @@ export class PaymentRepository {
         const payment = await prismaClient.payment.update({
             where: { id: paymentId },
             data: { paidAt: new Date(), status: 'PAID' },
+            include: { splits: true },
+        });
+
+        return payment;
+    }
+   
+    async markPaymentAsLate(paymentId: string) {
+        const payment = await prismaClient.payment.update({
+            where: { id: paymentId },
+            data: { paidAt: new Date(), status: PaymentStatus.LATE },
             include: { splits: true },
         });
 

@@ -1,7 +1,7 @@
 import { EntryOrigin, EntryStatus, EntryType } from '@prisma/client';
 import { FinancialEntryRepository } from './entryRepository';
 import { PaymentService } from '../payment/payment.service';
-import { createEntryPaymentDTO, GetSummaryDTO } from './entry.schema';
+import { createEntryPaymentDTO, GetListDTO, GetSummaryDTO } from './entry.schema';
 import { PaymentSplitDataType, PaymentSplitType } from '../paymentSplit/split.schema';
 
 export class FinancialEntryService {
@@ -60,8 +60,19 @@ export class FinancialEntryService {
 
         return paymentEntry;
     }
+  
+    async markAsOverDue(entryId: string) {
+        const paymentEntry = await this.repo.updateStatus(entryId, EntryStatus.OVERDUE, new Date());
 
-    async list(params: GetSummaryDTO) {
+        if (paymentEntry.paymentId && paymentEntry.type == 'RECEIVABLE') {
+            const paymentService = new PaymentService();
+            const payment = await paymentService.markPaymentAsLate(paymentEntry.paymentId);
+       }
+
+        return paymentEntry;
+    }
+
+    async list(params: GetListDTO) {
         return this.repo.list(params);
     }
 
@@ -73,7 +84,7 @@ export class FinancialEntryService {
         return this.repo.getRealizedFlow(startDate, endDate);
     }
 
-    async getProjectedFlow(startDate: Date, endDate: Date) {
+    async getProjectedFlow(startDate: string, endDate: string) {
         return this.repo.getProjectedFlow(startDate, endDate);
     }
 

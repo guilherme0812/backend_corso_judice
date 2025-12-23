@@ -17,6 +17,7 @@ import { customDocumentMappingRoutes } from './modules/CustomDocumentMapping/cus
 import { financialEntryRoutes } from './modules/financial/entry/entrey.route';
 import { paymentRoutes } from './modules/financial/payment/payment.routes';
 import { financialCategoryRoutes } from './modules/financial/category/category.route';
+import { JobService } from './modules/job/job.service';
 
 dotenv.config();
 
@@ -50,6 +51,9 @@ const start = async () => {
     app.register(financialEntryRoutes, { prefix: '/api' });
     app.register(paymentRoutes, { prefix: '/api' });
     app.register(financialCategoryRoutes, { prefix: '/api' });
+
+    const jobService = new JobService()
+    await jobService.startAll()
 
     try {
         await app.listen({

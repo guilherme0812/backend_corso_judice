@@ -3,8 +3,11 @@ import { z } from 'zod';
 export const getListSchema = z.object({
     startDate: z.string().optional(),
     endDate: z.string().optional(),
+    startDueDate: z.string().optional(),
+    endDueDate: z.string().optional(),
     companyId: z.string().uuid().optional(),
     limit: z.number().optional(),
+    status: z.enum(['PENDING', 'PAID', 'PARTIAL', 'OVERDUE']).optional(),
 });
 export type GetListDTO = z.infer<typeof getListSchema>;
 

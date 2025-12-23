@@ -11,6 +11,7 @@ import {
     getSummarySchema,
     payPaymentSchema,
 } from './entry.schema';
+import { GetAllParamsDTO } from '../payment/payment.schema';
 
 export class FinancialEntryController {
     private service = new FinancialEntryService();
@@ -21,14 +22,17 @@ export class FinancialEntryController {
         },
         reply: FastifyReply,
     ) {
-        const query = req.query as { startDate?: string; endDate?: string; limit?: string };
+        const query = req.query as GetListDTO;
         const companyId = req.user.companyId as string;
 
         const params: GetListDTO = {
-            startDate: query.startDate,
-            endDate: query.endDate,
+            startDate: query?.startDate,
+            endDate: query?.endDate,
             companyId,
             limit: query.limit ? Number(query.limit) : undefined,
+            startDueDate: query.startDueDate,
+            endDueDate: query.endDueDate,
+            status: query.status,
         };
         const validationSchema = getListSchema.safeParse(params);
         if (!validationSchema.success) {
@@ -75,7 +79,6 @@ export class FinancialEntryController {
         } & any,
         reply: FastifyReply,
     ) {
-        
         const body: createEntryPaymentDTO = {
             ...req.body,
             dueDate: new Date(req.body.dueDate).toISOString(),
@@ -91,7 +94,6 @@ export class FinancialEntryController {
         reply.status(200).send(payment);
     }
 
-    
     async getRealizedFlow(
         req: FastifyRequest & {
             user: UserDataType;
@@ -140,7 +142,7 @@ export class FinancialEntryController {
 
         const { startDate, endDate } = params;
 
-        const data = await this.service.getProjectedFlow(new Date(startDate || ''), new Date(endDate || ''));
+        const data = await this.service.getProjectedFlow(startDate || '', endDate || '');
         reply.status(200).send(data);
     }
 
