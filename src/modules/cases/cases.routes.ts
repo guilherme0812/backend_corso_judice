@@ -34,4 +34,10 @@ export async function casesRoutes(fastify: FastifyInstance) {
     { preHandler: [authMiddleware] },
     casesController.delete as any
   );
+ 
+  fastify.get(
+    "/case/timeseries",
+    { preHandler: [authMiddleware] },
+    casesController.getCaseTimeSeries as any
+  );
 }

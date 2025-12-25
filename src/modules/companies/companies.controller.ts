@@ -50,11 +50,12 @@ export class CompaniesController {
 
     async update(request: CustomFastifyQueryParam, reply: FastifyReply) {
         try {
-            if (!request.query.id) {
+            const body = request.body as any
+            if (!body.id) {
                 return createResponse('id is required');
             }
 
-            const result = await companyService.update(request.query.id, request.body as any);
+            const result = await companyService.update(body.id, request.body as any);
             return reply.status(200).send(result);
         } catch (error: any) {
             return reply.status(error.status || 500).send({

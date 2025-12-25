@@ -7,3 +7,9 @@ export const getAllCasesSchema = z.object({
     clientName: z.string().optional(),
 });
 export type GetCasesDTO = z.infer<typeof getAllCasesSchema>;
+
+export const getCaseTimeSeriesSchema = z.object({
+    companyId: z.string().optional(),
+    period: z.enum(['week', 'month', 'year']),
+});
+export type GetCaseTimeSeriesDTO = z.infer<typeof getCaseTimeSeriesSchema>;

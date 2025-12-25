@@ -4,7 +4,7 @@ import { CasePrismaRepository } from './repository/CasePrismaRepository';
 import { createResponse } from '../../utils/responseHelper';
 import { CaseDataType, CreateCase, FindAllParameters } from './repository/ICaseRepository';
 import { UserDataType } from '../users/repository/IUserRepository';
-import { getAllCasesSchema, GetCasesDTO } from './cases.schema';
+import { getAllCasesSchema, GetCasesDTO, GetCaseTimeSeriesDTO, getCaseTimeSeriesSchema } from './cases.schema';
 
 const caseRepository = new CasePrismaRepository();
 const caseService = new CaseService(caseRepository);
@@ -26,7 +26,7 @@ export class CasesController {
     ) {
         const params: GetCasesDTO = {
             companyId: request.user?.companyId as string,
-            ...request.query
+            ...request.query,
         };
 
         try {
@@ -103,6 +103,29 @@ export class CasesController {
 
             await caseService.remove(id);
             reply.status(201).send(createResponse('Case deleted'));
+        } catch (error: any) {
+            reply.status(error.status || 400).send({ message: error.message });
+        }
+    }
+
+    async getCaseTimeSeries(
+        request: FastifyRequest<{ Querystring: GetCaseTimeSeriesDTO }> & {
+            user: UserDataType;
+        },
+        reply: FastifyReply,
+    ) {
+        const params: GetCaseTimeSeriesDTO = {
+            companyId: request.user?.companyId as string,
+            ...request.query,
+        };
+
+        try {
+            const validationSchema = getCaseTimeSeriesSchema.safeParse(params);
+            if (!validationSchema.success) {
+                return reply.status(400).send({ error: 'Invalid query parameters', details: validationSchema.error });
+            }
+            const cases = await caseService.getCaseTimeSeries(params.companyId as string, params.period);
+            reply.status(200).send(cases);
         } catch (error: any) {
             reply.status(error.status || 400).send({ message: error.message });
         }

@@ -1,39 +1,39 @@
-import { GetCasesDTO } from "./cases.schema";
-import {
-  CaseDataType,
-  CreateCase,
-  ICaseRepository,
-} from "./repository/ICaseRepository";
+import { GetCasesDTO } from './cases.schema';
+import { CaseDataType, CreateCase, ICaseRepository } from './repository/ICaseRepository';
 
 export class CaseService {
-  constructor(private readonly caseRepository: ICaseRepository) {}
+    constructor(private readonly caseRepository: ICaseRepository) {}
 
-  async findAll(params?: GetCasesDTO) {
-    return this.caseRepository.findAll(params);
-  }
-
-  async findOne(id: string) {
-    const caseData = await this.caseRepository.findOne(id);
-
-    if (!caseData) {
-      throw { status: 404, message: "case not found" };
+    async findAll(params?: GetCasesDTO) {
+        return this.caseRepository.findAll(params);
     }
 
-    return caseData;
-  }
+    async findOne(id: string) {
+        const caseData = await this.caseRepository.findOne(id);
 
-  async create(body: CreateCase) {
-    return this.caseRepository.create(body);
-  }
+        if (!caseData) {
+            throw { status: 404, message: 'case not found' };
+        }
 
-  async update(id: string, body: CaseDataType) {
-    await this.findOne(id);
-    return this.caseRepository.update(id, body);
-  }
+        return caseData;
+    }
 
-  async remove(id: string) {
-    const caseData = await this.findOne(id);
+    async create(body: CreateCase) {
+        return this.caseRepository.create(body);
+    }
 
-    return this.caseRepository.remove(caseData.id);
-  }
+    async update(id: string, body: CaseDataType) {
+        await this.findOne(id);
+        return this.caseRepository.update(id, body);
+    }
+
+    async remove(id: string) {
+        const caseData = await this.findOne(id);
+
+        return this.caseRepository.remove(caseData.id);
+    }
+
+    async getCaseTimeSeries(companyId: string, period: 'week' | 'month' | 'year') {
+        return this.caseRepository.getCaseTimeSeries(companyId, period);
+    }
 }

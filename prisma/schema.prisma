@@ -280,6 +280,7 @@ model Case {
   indicatorFee  Float?
   status        CaseStatus @default(PENDING)
   createdAt     DateTime   @default(now())
+  closedAt      DateTime?
 
   payments         Payment[]
   financialEntries FinancialEntry[]

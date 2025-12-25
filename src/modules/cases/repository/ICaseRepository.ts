@@ -29,7 +29,7 @@ export interface CreateCase {
 export interface FindAllParameters {
     companyId?: string;
     clientId?: string;
-    name?: string
+    name?: string;
 }
 
 export interface ICaseRepository {
@@ -38,4 +38,15 @@ export interface ICaseRepository {
     create: (body: CreateCase) => Promise<CaseDataType>;
     update(id: string, data: Partial<CaseDataType>): Promise<CaseDataType>;
     remove(id: string): Promise<CaseDataType>;
+    getCaseTimeSeries(
+        companyId: string,
+        period: 'week' | 'month' | 'year',
+        referenceDate?: Date,
+    ): Promise<
+        {
+            label: string;
+            newCases: number;
+            closedCases: number;
+        }[]
+    >;
 }

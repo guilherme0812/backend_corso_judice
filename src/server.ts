@@ -53,7 +53,7 @@ const start = async () => {
     app.register(financialCategoryRoutes, { prefix: '/api' });
 
     const jobService = new JobService()
-    await jobService.startAll()
+    // await jobService.startAll()
 
     try {
         await app.listen({
